@@ -38,7 +38,7 @@ o canto inferior esquerdo da imagem com o canto superior direito.
 ![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/exemplos/Atividade%203.png)
 
 ## Atividade 4 - Desenhe a logo dos X-men
-Os X-men te contrataram para refazer sua logo, infelizmente o mundo está em uma
+Os X-men te contrataram para refazer sua logo, mas infelizmente o mundo está em uma
 catastofre pois o magneto destruiu todos os programas de edição do mundo, e
 agora seu dever é refazer a logo usando C
 <p>imagem de referencia:</p>
