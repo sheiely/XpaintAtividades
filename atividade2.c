@@ -10,8 +10,11 @@ de raio 200 no meio da tela
 
 int main() {
   x_open(largura, altura, "exemplos/Atividade 2");
+  /*
+  resolução:
   x_color_set(BLUE);
   x_fill_circle(300, 300, 200);
+  */
   x_save();
   x_close();
 
