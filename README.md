@@ -10,7 +10,8 @@ x_open(largura_da_imagem, altura_da_imagem, "nome da imagem");//cria a imagem
 x_save();//salva como png
 x_close();//libera os recursos
 ```
-## Atividade 1<
+## Atividade 1
 
-Nessa primeira atividade, voce só tera que gerar uma imagem com um quadrado <span style="color: red;">VERMELHO</span> exatamenete no centro
-- ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `#f03c15`
+Nessa primeira atividade, voce só tera que gerar uma imagem com um quadrado <code style="color: red;">VERMELHO</code> exatamenete no centro
+imagem de referencia:
+![Referencia_Atividade1](URL_da_Imagem)
