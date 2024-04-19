@@ -41,6 +41,7 @@ o canto inferior esquerdo da imagem com o canto superior direito.
 Os X-men te contrataram para refazer sua logo, mas infelizmente o mundo está em uma
 catastofre pois o magneto destruiu todos os programas de edição do mundo, e
 agora seu dever é refazer a logo usando C
+- Utilize 2 circulos e 2 retas
 <p>imagem de referencia:</p>
 
 ![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/exemplos/Atividade%204.png)
@@ -49,7 +50,7 @@ agora seu dever é refazer a logo usando C
 ## Atividade 5 - Xadrez
 Nessa atividade você tem que gerar uma imagem xadrez,
 a imagem deve ter 40x40 celulas de xadrez conforme o exemplo
-- realmente não é boa ideia pintar celula por celula :cold_sweat:
+- Realmente não é boa ideia pintar celula por celula :cold_sweat:
 <p>imagem de referencia:</p>
 
 ![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/exemplos/Atividade%205.png)
