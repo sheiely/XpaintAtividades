@@ -48,7 +48,7 @@ agora seu dever é refazer a logo usando C
 
 ## Atividade 5 - Xadrez
 Nessa atividade você tem que gerar uma imagem xadrez,
-a imagem deve ter 40x40 pixels e cada pixel deve ser uma celula do xadrez conforme o exemplo
+a imagem deve ter 40x40 celulaw de xadrez conforme o exemplo
 - realmente não é boa ideia pintar celula por celula :cold_sweat:
 <p>imagem de referencia:</p>
 
