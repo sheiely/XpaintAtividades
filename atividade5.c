@@ -4,11 +4,11 @@ int largura = 600, altura = 600;
 
 /*
 Atividade 5 - Xadrez
-Voce e um amigo são viciados em CHESS.COM a 5 anos, um dia o site do jogo acabou
-caindo. Como jovens do seculo XXI vocês nao tem xadrez em casa, entao para
-compensar resolveram criar uma versao de xadrez no computador.
+Você e um amigo são viciados em CHESS.COM a 5 anos, um dia o site do jogo acabou
+caindo. Como jovens do século XXI vocês não tem xadrez em casa, então para
+compensar resolveram criar uma versão de xadrez no computador.
 
-Nessa atividade voce tem que gerar uma imagem xadrez
+Nessa atividade você tem que gerar uma imagem xadrez
 A imagem deve ter 8x8 casas conforme o exemplo
 */
 
