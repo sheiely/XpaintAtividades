@@ -1,6 +1,6 @@
 # XpaintAtividades
 ## Rapido Tutorial
-Para utilizar o Xpaint temos que básicamente abrir a imagem com a função **x_open()**,
+Para utilizar o Xpaint temos que basicamente abrir a imagem com a função **x_open()**,
 depois para salvar e gerar o png usamos o **x_save()** e para encerrar o Xpaint e liberar os recursos o **x_close()**
 ```c
 x_open(largura_da_imagem, altura_da_imagem, "nome da imagem");//cria a imagem
@@ -15,17 +15,17 @@ https://github.com/senapk/xpaint
 
 ## Atividade 1 - Desenhe um retangulo
 
-Nessa primeira atividade, você só tera que gerar uma imagem com um retangulo <code>VERMELHO</code> exatamenete no centro
-- O retangulo deve ter: largura 200 e altura 300
-<p>imagem de referencia:</p>
+Nessa primeira atividade, você só tera que gerar uma imagem com um retângulo <code>VERMELHO</code> exatamente no centro
+- O retângulo deve ter: largura 200 e altura 300
+<p>imagem de referência:</p>
 
 ![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/exemplos/Atividade%201.png)
 
 ## Atividade 2 - Desenhe um circulo
 
-Nessa atividade, você deve gerar uma imagem com um circulo <code>AZUL</code> exatamenete no centro
+Nessa atividade, você deve gerar uma imagem com um círculo <code>AZUL</code> exatamente no centro
 - O Circulo deve ter: 200 de raio
-<p>imagem de referencia:</p>
+<p>imagem de referência:</p>
 
 ![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/exemplos/Atividade%202.png)
 
@@ -33,16 +33,16 @@ Nessa atividade, você deve gerar uma imagem com um circulo <code>AZUL</code> ex
 Nessa atividade você deve criar uma imagem com uma reta diagonal <code>VERDE</code> ligando
 o canto inferior esquerdo da imagem com o canto superior direito.
 - A reta deve ter: 5 pixeis de largura
-<p>imagem de referencia:</p>
+<p>imagem de referência:</p>
 
 ![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/exemplos/Atividade%203.png)
 
 ## Atividade 4 - Desenhe a logo dos X-men
 Os X-men te contrataram para refazer sua logo, mas infelizmente o mundo está em uma
-catastofre pois o magneto destruiu todos os programas de edição do mundo, e
+catastofre após o magneto destruir todos os programas de edição do mundo, e
 agora seu dever é refazer a logo usando C
-- Utilize 2 circulos e 2 retas
-<p>imagem de referencia:</p>
+- Utilize 2 círculos e 2 retas
+<p>imagem de referência:</p>
 
 ![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/exemplos/Atividade%204.png)
 
@@ -51,12 +51,12 @@ agora seu dever é refazer a logo usando C
 Você e um amigo são viciados em CHESS.COM a 5 anos, um dia o site do jogo acabou
 caindo. Como jovens do século XXI vocês não tem xadrez em casa, entao para
 compensar resolveram criar uma versao de xadrez no computador.
-- Realmente não é boa ideia pintar celula por celula :cold_sweat:
-<p>imagem de referencia:</p>
+- Realmente não é boa ideia pintar célula por célula :cold_sweat:
+<p>imagem de referência:</p>
 
 ![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/exemplos/Atividade%205.png)
 
-## Atividade 6 - Grafico
+## Atividade 6 - Gráfico
 Em processo 
 
 ![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/exemplos/Atividade%206.png)
