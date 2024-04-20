@@ -49,8 +49,8 @@ agora seu dever é refazer a logo usando C
 
 ## Atividade 5 - Xadrez
 Você e um amigo são viciados em CHESS.COM a 5 anos, um dia o site do jogo acabou
-caindo. Como jovens do século XXI vocês não tem xadrez em casa, entao para
-compensar resolveram criar uma versao de xadrez no computador.
+caindo. Como jovens do século XXI vocês não tem xadrez em casa, então para
+compensar resolveram criar uma versão de xadrez no computador.
 - Realmente não é boa ideia pintar célula por célula :cold_sweat:
 <p>imagem de referência:</p>
 
