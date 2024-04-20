@@ -48,8 +48,9 @@ agora seu dever é refazer a logo usando C
 
 
 ## Atividade 5 - Xadrez
-Nessa atividade você tem que gerar uma imagem xadrez,
-a imagem deve ter 40x40 celulas de xadrez conforme o exemplo
+Você e um amigo são viciados em CHESS.COM a 5 anos, um dia o site do jogo acabou
+caindo. Como jovens do século XXI vocês não tem xadrez em casa, entao para
+compensar resolveram criar uma versao de xadrez no computador.
 - Realmente não é boa ideia pintar celula por celula :cold_sweat:
 <p>imagem de referencia:</p>
 
