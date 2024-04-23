@@ -19,7 +19,7 @@ Nessa primeira atividade, você só tera que gerar uma imagem com um retângulo 
 - O retângulo deve ter: largura 200 e altura 300
 <p>imagem de referência:</p>
 
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Atividade%201/exemplos/Questao%201.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Comecando/exemplos/Questao%201.png)
 
 ## Questão 2 - Desenhe um circulo
 
@@ -27,7 +27,7 @@ Nessa atividade, você deve gerar uma imagem com um círculo <code>AZUL</code> e
 - O Circulo deve ter: 200 de raio
 <p>imagem de referência:</p>
 
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Atividade%201/exemplos/Questao%202.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Comecando/exemplos/Questao%202.png)
 
 ## Questão 3 - Desenhe uma reta diagonal 
 Nessa atividade você deve criar uma imagem com uma reta diagonal <code>VERDE</code> ligando
@@ -35,6 +35,6 @@ o canto inferior esquerdo da imagem com o canto superior direito.
 - A reta deve ter: 5 pixeis de largura
 <p>imagem de referência:</p>
 
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Conceitos/exemplos/Questao%203.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Comecando/exemplos/Questao%203.png)
 
 
