@@ -1,12 +1,12 @@
 # XpaintAtividades
 
 ## Primeiros Passos:
-- [@Comecando](Comecando/Readme.md)
+- [@Comecando](Comecando/README.md)
 
 ## Conceitos:
-- [@Desenhando](DesenhandoA/Readme.md)
-- [@Bandeiras](Bandeiras/Readme.md)
+- [@Desenhando](Desenhando/README.md)
+- [@Bandeiras](Bandeiras/README.md)
 
 ## Repetição:
-- [@For](Atividades For/Readme.md)
+- [@For](Xadrez/README.md)
 

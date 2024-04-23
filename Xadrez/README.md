@@ -7,5 +7,5 @@ compensar resolveram criar uma versão de xadrez no computador.
 - Realmente não é boa ideia pintar célula por célula :cold_sweat:
 <p>imagem de referência:</p>
 
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Atividade%203/exemplos/Questao%201.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Xadrez/exemplos/Questao%201.png)
 
