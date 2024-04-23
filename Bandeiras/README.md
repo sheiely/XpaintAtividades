@@ -28,31 +28,31 @@ x_open(largura, altura, "exemplos/Questao 1");
 
 ## Questão 1 - Leste Oeste
 
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Baneiras/exemplos/Questao%201.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplos/Questao%201.png)
 
 ## Questão 2 - Norte Sul
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Baneiras/exemplos/Questao%202.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplos/Questao%202.png)
 
 ## Questão 3 - Leste Meio Oeste
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Baneiras/exemplos/Questao%203.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplos/Questao%203.png)
 
 ## Questão 4 - Norte Meio Sul
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Baneiras/exemplos/Questao%204.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplos/Questao%204.png)
 
 ## Questão 5 - Leste Norte Sul
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Baneiras/exemplos/Questao%205.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplos/Questao%205.png)
 
 ## Questão 6 - Quadrantes
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Baneiras/exemplos/Questao%206.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplos/Questao%206.png)
 
 ## Questão 7 - Diagonal
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Baneiras/exemplos/Questao%207.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplos/Questao%207.png)
 
 ## Questão 8 - Contradiagonal
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Baneiras/exemplos/Questao%208.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplos/Questao%208.png)
 
 ## Questão 9 - X
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Baneiras/exemplos/Questao%209.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplos/Questao%209.png)
 
 ## Questão 10 - X não quadrado
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Baneiras/exemplos/Questao%2010.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplos/Questao%2010.png)
