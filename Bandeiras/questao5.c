@@ -7,8 +7,8 @@ int main(){
     x_open(largura, altura, "exemplos/Questao 5");
   
     for(int i=0; i < 400; i++){
-
-
+        
+        /* Resolução:
         int x = rand()%largura;
         int y = rand()%altura;
         if(x<largura/3){
@@ -21,7 +21,7 @@ int main(){
             }
         }
         x_fill_circle(x, y, 10);
-
+        */
 
 
 

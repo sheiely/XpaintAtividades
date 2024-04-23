@@ -8,7 +8,7 @@ int main(){
   
     for(int i=0; i < 400; i++){
 
-
+        /* Resolução:
         int x = rand()%largura;
         int y = rand()%altura;
         if(x<altura-y){
@@ -17,7 +17,7 @@ int main(){
             x_color_set(RED);
         }
         x_fill_circle(x, y, 10);
-
+        */
 
 
 
