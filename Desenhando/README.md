@@ -7,6 +7,6 @@ agora seu dever é refazer a logo usando C
 - Utilize 2 círculos e 2 retas
 <p>imagem de referência:</p>
 
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Atividade%202/exemplos/Questao%201.png)
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Desenhando/exemplos/Questao%201.png)
 
 
