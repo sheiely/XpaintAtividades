@@ -4,7 +4,7 @@ int largura = 600, altura = 600;
 
 /*
 Atividade 4 - Desenhe a logo dos X-men
-Os X-men te contrataram para refazer sua logo, infelizmente o mundo está em uma
+Os X-men te contrataram para refazer sua logo, mas infelizmente o mundo está em uma
 catastofre pois o magneto destruiu todos os programas de edição do mundo, e
 agora seu dever é refazer a logo usando C. Dica: Use 2 ciruclos e 2 linhas
 */
