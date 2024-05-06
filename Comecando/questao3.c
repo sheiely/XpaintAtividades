@@ -11,13 +11,13 @@ o canto inferior esquerdo da imagem com o canto superior direito.
 
 int main() {
 
-  x_open(largura, altura, "exemplos/Atividade 3");
-  /*
-   resolução:
-  x_color_set(GREEN);
-  x_fill_line(0, 600, 600, 0, 5);
-  */
-  x_save();
-  x_close();
+  open(largura, altura, "exemplos/Questao 3");
+  background(BLACK);
+  stroke(GREEN);
+  strokeWeight(5);
+
+  line(0, 600, 600, 0);
+  save();
+  close();
   return 0;
 }

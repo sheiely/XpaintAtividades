@@ -1,5 +1,8 @@
 #ifndef XPAINT_H
 #define XPAINT_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 /*
 You must use the following define in your code before #include the library
 #define XPAINT
@@ -17,7 +20,7 @@ Principais fontes:
 
 Licença: GPLv3
 
-Versão: 0.8
+Versão: 1.0
 
 */
 
@@ -28,17 +31,18 @@ Versão: 0.8
 #include "xpaint.h"
 int main(){
     int largura = 600, altura = 500;
-    x_open(largura, altura, "figura_base"); 
-    x_write(50, 30, "Pintarei um circulo vermelho em %d %d", largura/2, altura/2);
-    x_color_set("red");
-    x_fill_circle(largura/2, altura/2, 200);
-    x_save();
-    x_close();
+    open(largura, altura, "figura_base"); 
+    text(50, 30, "Pintarei um circulo vermelho em %d %d", largura/2, altura/2);
+    background(WHITE);
+    stroke(BLACK);
+    fill(RED)
+    circle(largura/2, altura/2, 200);
+    save();
+    close();
     return 0;
 }
 #endif
-
-
+#include <stdarg.h>
 
 /*
 ###############################################
@@ -49,95 +53,100 @@ int main(){
 /* apelido para um char sem sinal */
 typedef unsigned char uchar;
 
+// #define X_BYTES_PER_PIXEL 4
+
 /* struct que representa uma cor RGB */
 typedef struct{
     uchar r;
     uchar g;
     uchar b;
     uchar a;
-} X_Color;
+} Color;
+
+#define WHITE     (Color) {238, 232, 213, 255} // w
+#define BLACK     (Color) {7  , 54 , 66 , 255} // k
+#define GREEN     (Color) {133, 153, 0  , 255} // g
+#define RED       (Color) {211, 1  , 2  , 255} // r
+#define BLUE      (Color) {38 , 139, 210, 255} // b
+#define YELLOW    (Color) {181, 137, 0  , 255} // y
+#define CYAN      (Color) {42 , 161, 152, 255} // c
+#define MAGENTA   (Color) {211, 54 , 130, 255} // m
+#define ORANGE    (Color) {253, 106,   2, 255} // o
+#define VIOLET    (Color) {108, 113, 196, 255} // v
+
+/* cria e retorna uma struct Color passando rgba */
+Color rgba(uchar r, uchar g, uchar b, uchar a);
 
 
-#define WHITE     (X_Color) {238, 232, 213, 255} // w
-#define BLACK     (X_Color) {7  , 54 , 66 , 255} // k
-#define GREEN     (X_Color) {133, 153, 0  , 255} // g
-#define RED       (X_Color) {211, 1  , 2  , 255} // r
-#define BLUE      (X_Color) {38 , 139, 210, 255} // b
-#define YELLOW    (X_Color) {181, 137, 0  , 255} // y
-#define CYAN      (X_Color) {42 , 161, 152, 255} // c
-#define MAGENTA   (X_Color) {211, 54 , 130, 255} // m
-#define ORANGE    (X_Color) {253, 106,   2, 255} // o
-#define VIOLET    (X_Color) {108, 113, 196, 255} // v
-
-/* cria e retorna uma struct X_Color passando rgb */
-X_Color x_color_make(uchar r, uchar g, uchar b, uchar a);
-
-/* define uma cor na paleta de caracteres */
-void x_color_set_palette(char c, X_Color color);
-
-/* retorna uma cor dado um char.
-   os char default da paleta são rgbmcybk
-   outros podem ser definidos ou redefinidor com palette_set
+/* obtém uma cor da paleta, possui vários modos
+1: uso de hexadecimal como : "#00ffbb"
+2: uso de rgba entre virgulas "144,123,12,255"
+3. tons de cinza entre 0 e 255: "100", "0", "150"
+4: uso de palavras chave ou letras
+    "black" ou "k"
+    "white" ou "w"
+    "red", "blue", "yellow", "pink", "cyan", ...
+5: pode ser construído com a sintexa do printf
+    ("%d, %d, %d", 10, 20 , 30)
 */
-X_Color x_color_get_palette(char c);
+Color color(const char * format, ...);
+
+/*
+###############################################
+### FUNÇÕES SET: Cor, Fonte, Paleta de Cores ##
+###############################################
+*/
 
 
-void __x_init_pallete();
+/* define uma entrada na paleta de cores
+index: pode ser utilizado para registrar uma cor na paleta
+entry: chave para a cor, que pode ser uma letra ou palavra
+color: cor a ser registrada
+*/
+void setPallete(const char * entry, Color color);
+
+/* inicializa as cores da paleta e da base
+*/
+void __init_colors(void);
+
+void color_print_all();
+void color_show(Color color);
+
 
 
 #include <stdarg.h>
 
 /* @brief Open the board to draw */
 /* @param filename path to save the png */
-void x_open(unsigned int width, unsigned int height, const char * filename);
+void open(unsigned int width, unsigned int height, const char * filename);
 
 /* retorna altura, largura, filename and bitmap */
-int          x_get_height(void);
-int          x_get_width(void);
-const char * x_get_filename(void);
-uchar      * x_get_bitmap(void);
+int          height(void);
+int          width(void);
+const char * getFilename(void);
+uchar      * getBitmap(void);
+
 
 /* @brief Clear all resources */
-void x_close(void);
+void close(void);
 
 /* @brief Changes the the default filename to save the image */
 /* @param filename path */
-void x_set_filename(const char * filename);
+void setFilename(const char * filename);
 
-/* define the path ou command to external tool to open the image in first save */
-/* Ex: "gthumb", "gthumb" */
-void x_set_viewer(const char * viewer);
-
-/* a funcao plot pinta o pixel usando a cor padrão */
-void x_plot(int x, int y);
+void __plot(int x, int y,  Color color);
 
 /* retorna a cor do pixel dessa posicao do bitmap */
-X_Color x_get_pixel(int x, int y);
-
-/* muda a cor do pincel*/
-void x_color_set(X_Color color);
-
-#ifdef __cplusplus
-
-void x_color_set(int r, int g, int b, int a = 255);
-void x_color_set(char color);
-
-#endif
-
-/* muda a cor do pincel usando a paleta de cores*/
-void x_color_load(char color);
-
-/* return the current color for brush */
-X_Color x_color_get(void);
+Color getPixel(int x, int y);
 
 /* limpa a tela inteira com a mesma cor */
-void x_clear(void);
+void background(Color color);
 
 /* save the bitmap in filename.png */
-void x_save(void);
+void save(void);
 
 /* Enable interactive save and lock control */
-void x_set_lock();
+void setLock();
 
 /*
     define folder to saves the file with a numeric sufix at the end
@@ -145,10 +154,32 @@ void x_set_lock();
     will save the following files
     img_00000.png img_00001.png img_00002.png img_00003.png
 */
-void x_set_log(const char * folder);
+void setLog(const char * folder);
 
 /* creates a .mp4 video using all .png stored in folder using ffmpeg */
-void x_make_video(int framerate);
+void makeVideo(int framerate, const char * mp4_filename);
+
+typedef struct {
+    double dx;
+    double dy;
+    double s;
+    double angle;
+} Transform;
+
+/* Define um vetor bidimensional com x e y */
+typedef struct{
+    double x;
+    double y;
+} V2d;
+
+void push();
+void pop();
+void translate(double dx, double dy);
+void scale(double s);
+void rotate(double angle);
+
+V2d __transform(double x, double y);
+double __get_transform_scale();
 
 
 
@@ -156,45 +187,56 @@ void x_make_video(int framerate);
 /* ############ FUNÇÕES DE DESENHO DE LINHAS ##### */
 /* ############################################### */
 
+void strokeWeight(int thickness);
+
+/* a funcao __plot pinta o pixel transformado */
+void point(double x, double y, Color color);
+
+/* muda a cor do pincel*/
+void stroke(Color color);
+
+// /* muda a cor do pincel*/
+// void stroke_rgba(uchar r, uchar g, uchar b, uchar a);
+
+// /* muda a cor do pincel usando a paleta de cores*/
+// void stroke_char(char c);
+
+/* muda a cor do pincel*/
+void fill(Color color);
+
+// /* muda a cor do pincel*/
+// void fill_rgba(uchar r, uchar g, uchar b, uchar a);
+
+// /* muda a cor do pincel usando a paleta de cores*/
+// void fill_char(char c);
+
+/* desabilita o pincel */
+void noStroke();
+
+/* desabilita o preenchimento */
+void noFill();
+
+/* return the current color for brush */
+Color getStroke(void);
+
+/* return the current color for brush */
+Color getFill(void);
+
+
 /* desenha uma forma utilizando uma string e o mapa de cores default */
-int x_draw_art(int x, int y, int zoom, const char * picture);
-
-/* desenha uma linha com anti aliasing com espessura de 1 pixel entre os pontos (x0, y0) e (x1, y1) */
-void x_draw_line(int x0, int y0, int x1, int y1);
-
-/* linha sem anti aliasing */
-void x_draw_sline(int x0, int y0, int x1, int y1);
-
-/* desenha uma linha com espessura de thickness pixels entre os pontos (x0, y0) e (x1, y1) */
-void x_fill_line(float x0, float y0, float x1, float y1, int thickness);
-
-/* desenha um circulo com centro (centerx, centerx) e raio radius */
-void x_draw_circle(int centerx, int centery, int radius);
-
-/* desenha um circulo dado centro e raio */
-void x_fill_circle(int centerx, int centery, int radius);
-
-/* desenha uma elipse dentro do rect de ponto superior esquerdo(x0, y0), largura e altura */
-void x_draw_ellipse(int x0, int y0, int width, int height);
-
-/* desenha uma elipse dentro do rect de ponto superior esquerdo(x0, y0), largura e altura */
-void x_fill_ellipse(int x0, int y0, int width, int height);
-
-/* desenha uma curva de bezier entre os pontos (x0, y0) e (x2, y2) */
-/* a curvatura eh dada pelo ponto (x1, y1) */
-void x_draw_bezier(int x0, int y0, int x1, int y1, int x2, int y2);
+int ascArt(int x, int y, int zoom, const char * picture);
+void line(double x0, double y0, double x1, double y1);
+void ellipse(double x0, double y0, double width, double height);
 
 /* desenha um arco dado o ponto de centro, raio, espessura */
 /* o angulo de inicio e o comprimento do arco em graus */
 /* ambos os valores de ângulo podem ser negativos */
-void x_fill_arc(float centerx, float centery, int radius, int thickness, int degrees_begin, int degrees_lenght);
-
-/* desenha um triangulo dados os 3 vertices */
-void x_fill_triangle(float v1x, float v1y, float v2x, float v2y, float v3x, float v3y);
-
-/* desenha um retangulo dados os cantos superior esquerdo (x0, y0), largura e altura */
-void x_fill_rect(int x0, int y0, int width, int height);
-
+void arc(double centerx, double centery, int radius, int thickness, int degrees_begin, int degrees_lenght);
+void circle(int centerx, int centery, int diameter);
+void rect(double x, double y, double witdh, double height);
+void square(double x, double y, double size);
+void bezier(double xa, double ya, double xb, double yb, double xc, double yc, double xd, double yd);
+void triangle(double x0, double y0, double x1, double y1, double x2, double y2);
 
 
 #include <stdarg.h>
@@ -202,11 +244,11 @@ void x_fill_rect(int x0, int y0, int width, int height);
 void __x_init_font();
 
 // muda o tamanho da font
-void x_write_set_size(int size);
+void textSize(int size);
 
 // escreve utilizando o formato printf
 // retorna a posicao final em x
-int x_write(int x, int y, const char * format, ...);
+int text(int x, int y, const char * format, ...);
 
 /* Faz o SWAP entre dois tipos */
 #define X_SWAP(x, y, T) do { T X_SWAP = x; x = y; y = X_SWAP; } while (0)
@@ -217,51 +259,45 @@ int x_write(int x, int y, const char * format, ...);
 ###############################################
 */
 
-/* Define um vetor bidimensional com x e y */
-typedef struct{
-    double x;
-    double y;
-} V2d;
-
 /* cria e retorna um vetor */
-V2d x_v2d_make(double x, double y);
+V2d v2d(double x, double y);
 
 /* retorna o tamanho de um vetor da origem */
-double x_v2d_length(double x, double y);
+double v2d_length(double x, double y);
 
 /* retorna a distancia entre dois pontos */
-double x_v2d_distance(double ax, double ay, double bx, double by);
+double dist(double ax, double ay, double bx, double by);
 
 /* retorna a + b */
-V2d x_v2d_sum(V2d a, V2d b);
+V2d v2d_sum(V2d a, V2d b);
 
 /* retorna a - b */
-V2d x_v2d_sub(V2d a, V2d b);
+V2d v2d_sub(V2d a, V2d b);
 
 /* retorna (a.x * value, a.y * value) */
-V2d x_v2d_dot(V2d a, double value);
+V2d v2d_dot(V2d a, double value);
 
 /* retorna o vetor normalizado */
-V2d x_v2d_normalize(V2d v);
+V2d v2d_normalize(V2d v);
 
 /* retorna o vetor orthogonal */
-V2d x_v2d_ortho(V2d v);
+V2d v2d_ortho(V2d v);
 
 // ####### FUNÇÕES MATEMATICAS ##############
 
-double x_math_sqrt(const double m);
-double x_math_pow( double x, double y );
-int    x_math_floor(double x);
-int    x_math_round(double x);
-double x_math_fmod(double a, double b);
-int    x_math_ceil(double n);
+double xsqrt(const double m);
+double xpow( double x, double y );
+int    xfloor(double x);
+int    xround(double x);
+double xfmod(double a, double b);
+int    xceil(double n);
 /* degrees */
-double x_math_sin(double d);
-double x_math_cos(double d);
-double x_math_acos(double x);
-double x_math_fabs(double f);
+double xsin(double d);
+double xcos(double d);
+double xacos(double x);
+double xfabs(double f);
 /* Generates a int number in interval [min, max[ */
-int    x_math_rand(int min, int max);
+int    xrand(int min, int max);
 
 
 /*
@@ -273,16 +309,16 @@ int    x_math_rand(int min, int max);
 /*Init the grid*/
 /*side is the size of the cell */
 /*sep the space in black between cells */
-void x_grid_init(int side, int sep);
+void gridInit(int side, int sep);
 
 /*plots a square in cell*/
-void x_grid_square(int l, int c);
+void gridSquare(int l, int c);
 
 /*plots a circle in cell*/
-void x_grid_circle(int l, int c);
+void gridCircle(int l, int c);
 
 /*writes a text until 5 char in cell*/
-void x_grid_write(int l, int c, const char *format, ...);
+void gridText(int l, int c, const char *format, ...);
 
 
 /*
@@ -298,7 +334,7 @@ void x_grid_write(int l, int c, const char *format, ...);
  * @param size the size of the array
  * @param max the max value of the array
  */
-void x_bar_init(int size, int max);
+void barInit(int size, int max);
 
 /**
  * @brief print a single bar
@@ -306,7 +342,7 @@ void x_bar_init(int size, int max);
  * @param i the index
  * @param value the value of the bar size
  */
-void x_bar_one(int i, int value);
+void barOne(int i, int value);
 
 /**
  * @brief show the entire array
@@ -316,13 +352,13 @@ void x_bar_one(int i, int value);
  * @param colors the array of color to mark unique elements or NULL
  * @param indices the array with the unique indices to be marked with the colors
  */
-void x_bar_all(int * vet, int size, const char * colors, int * indices);
+void barAll(int * vet, int size, const char * colors, int * indices);
 
 
-#define x_bar_save(vet, size, colors, ...) do{\
+#define barSave(vet, size, colors, ...) do{\
     int __indices[] = {__VA_ARGS__};\
-    x_bar_all(vet, size, colors, __indices);\
-    x_save();\
+    barAll(vet, size, colors, __indices);\
+    save();\
 } while(0);
 
 /*
@@ -331,22 +367,25 @@ void x_bar_all(int * vet, int size, const char * colors, int * indices);
 ###############################################
 */
 
-void   x_pen_set_angle(double degrees);
-void   x_pen_set_thick(int thick);
-void   x_pen_set_pos(double x, double y);
-double x_pen_get_angle();
-int    x_pen_get_thick();
-double x_pen_get_x();
-double x_pen_get_y();
-void   x_pen_up(void);
-void   x_pen_down(void);
-void   x_pen_walk(double distance);
-void   x_pen_rotate(int degrees);
-void   x_pen_goto(double x, double y);
+void   penSetAngle(double degrees);
+void   penSetThick(int thick);
+void   penSetPos(double x, double y);
+double penGetAngle();
+int    penGetThick();
+double penGetX();
+double penGetY();
+void   penUp(void);
+void   penDown(void);
+void   penWalk(double distance);
+void   penRotate(int degrees);
+void   penGoto(double x, double y);
 
 
 
 
+#ifdef __cplusplus
+}
+#endif
 #endif /* XPAINT_H */
 #ifdef XPAINT /* inicio da implementacao */
 /*
@@ -674,7 +713,7 @@ void lodepng_compress_settings_init(LodePNGCompressSettings* settings);
 
 #ifdef LODEPNG_COMPILE_PNG
 /*
-X_Color mode of an image. Contains all information required to decode the pixel
+Color mode of an image. Contains all information required to decode the pixel
 bits to RGBA colors. This information is the same as used in the PNG file
 format, and is used both for PNG and raw image data in LodePNG.
 */
@@ -846,7 +885,7 @@ typedef struct LodePNGInfo {
   unsigned phys_unit; /*may be 0 (unknown unit) or 1 (metre)*/
 
   /*
-  X_Color profile related chunks: gAMA, cHRM, sRGB, iCPP
+  Color profile related chunks: gAMA, cHRM, sRGB, iCPP
 
   LodePNG does not apply any color conversions on pixels in the encoder or decoder and does not interpret these color
   profile values. It merely passes on the information. If you wish to use color profiles and convert colors, please
@@ -4757,7 +4796,7 @@ unsigned lodepng_chunk_create(unsigned char** out, size_t* outlength, unsigned l
 }
 
 /* ////////////////////////////////////////////////////////////////////////// */
-/* / X_Color types, channels, bits                                            / */
+/* / Color types, channels, bits                                            / */
 /* ////////////////////////////////////////////////////////////////////////// */
 
 /*checks if the colortype is valid and the bitdepth bd is allowed for this colortype.
@@ -5815,7 +5854,7 @@ void lodepng_compute_color_stats(LodePNGColorStats* stats,
           stats->key_g = g;
           stats->key_b = b;
         } else if(a == 65535 && stats->key && matchkey) {
-          /* X_Color key cannot be used if an opaque pixel also has that RGB color. */
+          /* Color key cannot be used if an opaque pixel also has that RGB color. */
           stats->alpha = 1;
           stats->key = 0;
           alpha_done = 1;
@@ -5828,7 +5867,7 @@ void lodepng_compute_color_stats(LodePNGColorStats* stats,
       for(i = 0; i != numpixels; ++i) {
         getPixelColorRGBA16(&r, &g, &b, &a, in, i, mode_in);
         if(a != 0 && r == stats->key_r && g == stats->key_g && b == stats->key_b) {
-          /* X_Color key cannot be used if an opaque pixel also has that RGB color. */
+          /* Color key cannot be used if an opaque pixel also has that RGB color. */
           stats->alpha = 1;
           stats->key = 0;
           alpha_done = 1;
@@ -5866,7 +5905,7 @@ void lodepng_compute_color_stats(LodePNGColorStats* stats,
           stats->key_g = g;
           stats->key_b = b;
         } else if(a == 255 && stats->key && matchkey) {
-          /* X_Color key cannot be used if an opaque pixel also has that RGB color. */
+          /* Color key cannot be used if an opaque pixel also has that RGB color. */
           stats->alpha = 1;
           stats->key = 0;
           alpha_done = 1;
@@ -5897,7 +5936,7 @@ void lodepng_compute_color_stats(LodePNGColorStats* stats,
       for(i = 0; i != numpixels; ++i) {
         getPixelColorRGBA8(&r, &g, &b, &a, in, i, mode_in);
         if(a != 0 && r == stats->key_r && g == stats->key_g && b == stats->key_b) {
-          /* X_Color key cannot be used if an opaque pixel also has that RGB color. */
+          /* Color key cannot be used if an opaque pixel also has that RGB color. */
           stats->alpha = 1;
           stats->key = 0;
           alpha_done = 1;
@@ -8438,235 +8477,267 @@ unsigned encode(const std::string& filename,
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
+#define X_MAX_ITENS 1000
 
-static X_Color __board_palette[256];
+typedef struct ColorEntry{
+    char key[20];
+    Color color;
+} ColorEntry;
 
-X_Color x_color_make(uchar r, uchar g, uchar b, uchar a){
-    X_Color x = {r, g, b, a};
+static Color __board_palette[256];
+ColorEntry __arr_colors[X_MAX_ITENS];
+int __arr_colors_size = 0;
+
+Color rgba(uchar r, uchar g, uchar b, uchar a) {
+    Color x = {r, g, b, a};
     return x;
 }
 
-void x_color_set_palette(char c, X_Color color){
-    __board_palette[(int)c] = color;
+bool __x_validate_hex(const char * color) {
+    for(int i = 1; i < 7; i++) {
+        if(color[i] >= '0' && color[i] <= '9')
+            continue;
+        else if(color[i] >= 'a' && color[i] <= 'f')
+            continue;
+        else
+            return false;
+    }
+    return true;
 }
 
-X_Color x_color_get_palette(char c){
-    return __board_palette[(int)c];
+bool __decode_hex(const char * _color, Color * xc) {
+    if(_color[0] != '#' || strlen(_color) != 7)
+        return false;
+    char color[8];
+    strcpy(color, _color);
+    for(int i = 1; i < 7; i++)
+        color[i] = tolower(_color[i]);
+    if(!__x_validate_hex(color))
+        return false;
+    unsigned int r, g, b;
+    int readings = sscanf(color + 1, "%02x%02x%02x", &r, &g, &b);
+    if(readings != 3)
+        return false;
+    *xc = (Color) {(unsigned char) r, (unsigned char)g, (unsigned char)b, 255};
+    return true;
 }
 
-void __x_init_pallete(void){
-    int i = 0;
-    for(i = 0; i < 256; i++)
-        __board_palette[i] = WHITE;
-
-    __board_palette['r'] = RED;
-    __board_palette['g'] = GREEN;
-    __board_palette['b'] = BLUE;
-    __board_palette['y'] = YELLOW;
-    __board_palette['m'] = MAGENTA;
-    __board_palette['c'] = CYAN;
-    __board_palette['k'] = BLACK;
-    __board_palette['w'] = WHITE;
-    __board_palette['o'] = ORANGE;
-    __board_palette['v'] = VIOLET;
+int __x_count_colon(const char * color) {
+    int cont = 0;
+    for(int i = 0; color[i] != '\0' ; i++)
+        if(color[i] == ',')
+            cont += 1;
+    return cont;
 }
 
-
-//bool __x_validate_hex(const char * color){
-//    for(int i = 1; i < 7; i++){
-//        if(color[i] >= '0' && color[i] <= '9')
-//            continue;
-//        else if(color[i] >= 'a' && color[i] <= 'f')
-//            continue;
-//        else
-//            return false;
-//    }
-//    return true;
-//}
-
-//bool __x_decode_hex(const char * _color, X_Color * xc){
-//    if(strlen(_color) != 7 || _color[0] != '#')
-//        return false;
-//    char color[8];
-//    strcpy(color, _color);
-//    for(int i = 1; i < 7; i++)
-//        color[i] = tolower(_color[i]);
-//    if(!__x_validate_hex(color))
-//        return false;
-//    unsigned int r, g, b;
-//    int readings = sscanf(color + 1, "%02x%02x%02x", &r, &g, &b);
-//    if(readings != 3)
-//        return false;
-//    *xc = (X_Color){r, g, b, 255};
-//    return true;
-//}
-
-//int __x_count_colon(const char * color){
-//    int cont = 0;
-//    int size = strlen(color);
-//    for(int i = 0; i < size; i++)
-//        if(color[i] == ',')
-//            cont += 1;
-//    return cont;
-//}
-
-//bool __x_decode_rgba(const char * color, X_Color * xc){
-//    int number_of_colons = __x_count_colon(color);
-//    if(number_of_colons != 2 && number_of_colons != 3)
-//        return false;
-//    char decode[4][4] = {"", "", "", ""};
-//    int  idecode[4];
-//    int ind = 0;
-//    int size = strlen(color);
-//    for(int i = 0; i < size; i++){
-//        if(color[i] == ',')
-//            ind += 1;
-//        else if(color[i] == ' ')
-//            continue;
-//        else if((color[i] >= '0') && (color[i] <= '9')){
-//            char str[2] = "x";
-//            str[0] = color[i];
-//            strcat(decode[ind], str);
-//        }
-//        else{
-//            return false;
-//        }
-//    }
-//    if(ind == 2)
-//        strcpy(decode[3], "255");
-//    for(int i = 0; i < 4; i++)
-//        idecode[i] = atoi(decode[i]);
-//    xc->r = idecode[0];
-//    xc->g = idecode[1];
-//    xc->b = idecode[2];
-//    xc->a = idecode[3];
-//    for(int i = 0; i < 4; i++){
-//        if((idecode[i] < 0) || (idecode[i] > 255))
-//            printf("warning: a rgb color should be inside the interval [0, 255]: %d\n", idecode[i]);
-//    }
+bool __x_decode_rgba(const char * color, Color * xc) {
+    int number_of_colons = __x_count_colon(color);
+    if(number_of_colons != 2 && number_of_colons != 3)
+        return false;
+    char decode[4][4] = {"", "", "", ""};
+    int  idecode[4];
+    int ind = 0;
+    int size = strlen(color);
+    for(int i = 0; i < size; i++) {
+        if(color[i] == ',') {
+            ind += 1;
+        }
+        else if(color[i] == ' ') {
+            continue;
+        } 
+        else if((color[i] >= '0') && (color[i] <= '9')) {
+            char str[2] = "x";
+            str[0] = color[i];
+            strcat(decode[ind], str);
+        }
+        else {
+            return false;
+        }
+    }
+    if(ind == 2)
+        strcpy(decode[3], "255");
+    for(int i = 0; i < 4; i++)
+        idecode[i] = atoi(decode[i]);
+    xc->r = idecode[0];
+    xc->g = idecode[1];
+    xc->b = idecode[2];
+    xc->a = idecode[3];
+    for(int i = 0; i < 4; i++) {
+        if((idecode[i] < 0) || (idecode[i] > 255))
+            printf("warning: a rgb color should be inside the interval [0, 255]: %d\n", idecode[i]);
+    }
     
-//    return true;
-//}
+    return true;
+}
 
-//bool __x_color_load(const char * color, X_Color * xc){
-//    if(strlen(color) == 1){
-//        int pos = color[0];
-//        *xc = __board_palette[pos];
-//        return true;
-//    }
+bool __decode_single_char(const char * color, Color * xc) {
+    if(strlen(color) != 1)
+        return false;
+    if(isdigit(color[0]))
+        return false;
+    *xc = __board_palette[(int) color[0]];
+    return true;
+}
 
-//    for(int i = 0; i < x_arr_colors_size; i++){
-//        if(strcmp(x_arr_colors[i].key, color) == 0){
-//            *xc = x_arr_colors[i].color;
-//            return true;
-//        }
-//    }
-//    return false;
-//}
+//receive a number and interpret a gray scale color
+//100 -> 100, 100, 100, 255
+//255 -> 255, 255, 255, 255
+//0   -> 0, 0, 0, 255
+bool __decode_gray(const char * color, Color * xc) {
+    //convert to integer usign base 10 and check if it is a valid number
+    char * endptr = NULL;
+    int number = strtol(color, &endptr, 10);
+    if(*endptr != '\0')
+        return false;
 
-//void x_color_store(char shortcut[2], const char * entry, X_Color color){
-//    palette_set(shortcut[0], color);
-//    x_color_add(entry, color);
-//}
+    *xc = rgba(number, number, number, 255);
+    return true;
+}
 
-//void x_color_add(const char * entry, X_Color color){
-//    if(x_arr_colors_size < X_MAX_ITENS){
-//        strcpy(x_arr_colors[x_arr_colors_size].key, entry);
-//        x_arr_colors[x_arr_colors_size].color = color;
-//        x_arr_colors_size += 1;
-//    }
-//}
+bool __decode_by_name(const char * color, Color * xc) {
+    for(int i = 0; i < __arr_colors_size; i++) {
+        if(strcmp(__arr_colors[i].key, color) == 0) {
+            *xc = __arr_colors[i].color;
+            return true;
+        }
+    }
+    return false;
+}
 
-//void __x_init_colors(){
-//    for(int i = 0; i < 256; i++)
-//        __board_palette[i] = WHITE;
+void __color_store(const char * shortcut, const char * entry, Color color) {
+    setPallete(shortcut, color);
+    setPallete(entry, color);
+}
 
-//    x_color_store("a", "aqua",    x_color_make(0, 255, 255, 255));
-//    x_color_store("A", "amber",    x_color_make(255,191,0, 255));
+void setPallete(const char * entry, Color color) {
+    if(strlen(entry) == 1) {
+        __board_palette[(int) entry[0]] = color;
+        return;
+    }
 
-//    x_color_store("b", "blue",    x_color_make(38 , 139, 210, 255));
-//    x_color_store("B", "brown",    x_color_make(150,75,0, 255));
+    // if the color is not in the palette, add it
+    for(int i = 0; i < __arr_colors_size; i++) {
+        if(strcmp(__arr_colors[i].key, entry) == 0) {
+            __arr_colors[i].color = color;
+            return;
+        }
+    }
 
-//    x_color_store("c", "cyan",    x_color_make(42 , 161, 152, 255));
-//    x_color_store("C", "corn",    x_color_make(251,236,93, 255));
-//    x_color_store("0", "coral",  x_color_make(255, 127, 80  , 255));
+    if(__arr_colors_size < X_MAX_ITENS) {
+        strcpy(__arr_colors[__arr_colors_size].key, entry);
+        __arr_colors[__arr_colors_size].color = color;
+        __arr_colors_size += 1;
+    }
+}
 
-//    x_color_store("d", "dark",    x_color_make(7  , 54 , 66 , 255));
-//    x_color_store("D", "desert",    x_color_make(193, 154, 107, 255));
+void __init_colors() {
+    //init constant time loading colors
+    for(size_t i = 0; i < 256; i++) {
+        __board_palette[i] = rgba(0, 0, 0, 255);
+    }
 
-//    x_color_store("e", "error",   x_color_make(255,   0,   0, 255));
-//    x_color_store("E", "emerald", x_color_make(80,200,120, 255));
+    __color_store("a", "aqua",    rgba(0, 255, 255, 255));
+    __color_store("A", "amber",   rgba(255,191,0, 255));
 
-//    x_color_store("f", "flax",    x_color_make(238, 220, 130, 255));
-//    x_color_store("F", "forest",  x_color_make(34,139,34, 255));
+    __color_store("b", "blue",    rgba(38 , 139, 210, 255));
+    __color_store("B", "brown",   rgba(150,75,0, 255));
 
-//    x_color_store("g", "green",   x_color_make(133, 153, 0  , 255));
-//    x_color_store("G", "gold",    x_color_make(255, 215, 0, 255));
-//    x_color_store("1", "gray",  x_color_make(128, 128, 128  , 255));
+    __color_store("c", "cyan",    rgba(42 , 161, 152, 255));
+    __color_store("C", "corn",    rgba(251,236,93, 255));
+    __color_store("0", "coral",   rgba(255, 127, 80  , 255));
 
-//    x_color_store("h", "heaven",  x_color_make(180, 176, 236, 255));
-//    x_color_store("H", "han",     x_color_make(68, 108, 207, 255));
+    __color_store("d", "dark",    rgba(7  , 54 , 66 , 255));
+    __color_store("D", "desert",  rgba(193, 154, 107, 255));
 
-//    x_color_store("i", "indigo",  x_color_make(0  ,  65, 106, 255));
-//    x_color_store("I", "iceberg",  x_color_make(113, 166, 210, 255));
+    __color_store("e", "error",   rgba(255,   0,   0, 255));
+    __color_store("E", "emerald", rgba(80,200,120, 255));
 
-//    x_color_store("j", "jade",    x_color_make(0  , 168, 107, 255));
-//    x_color_store("J", "jasmine",    x_color_make(248, 222, 126, 255));
+    __color_store("f", "flax",    rgba(238, 220, 130, 255));
+    __color_store("F", "forest",  rgba(34,139,34, 255));
 
-//    x_color_store("k", "black",   x_color_make(7  , 54 , 66 , 255));
-//    x_color_store("K", "khaki",   x_color_make(195, 176, 145, 255));
+    __color_store("g", "green",   rgba(133, 153, 0  , 255));
+    __color_store("G", "gold",    rgba(255, 215, 0, 255));
+    __color_store("1", "gray",    rgba(128, 128, 128  , 255));
 
-//    x_color_store("l", "lavender",x_color_make(240, 230, 140, 255));
-//    x_color_store("L", "lime",    x_color_make(191, 255, 0, 255));
+    __color_store("h", "heaven",  rgba(180, 176, 236, 255));
+    __color_store("H", "han",     rgba(68, 108, 207, 255));
 
-//    x_color_store("m", "magenta", x_color_make(211, 54 , 130, 255));
-//    x_color_store("M", "maroon", x_color_make(128,0,0, 255));
-//    x_color_store("2", "midnight",x_color_make(25, 25, 112, 255));
+    __color_store("i", "indigo",  rgba(0  ,  65, 106, 255));
+    __color_store("I", "iceberg", rgba(113, 166, 210, 255));
 
-//    x_color_store("n", "navy", x_color_make(0,0,128, 255));
+    __color_store("j", "jade",    rgba(0  , 168, 107, 255));
+    __color_store("J", "jasmine", rgba(248, 222, 126, 255));
 
-//    x_color_store("o", "orange",  x_color_make(253, 106, 2, 255));
-//    x_color_store("O", "olive",  x_color_make(128, 128, 0, 255));
+    __color_store("k", "black",   rgba(7  , 54 , 66 , 255));
+    __color_store("K", "khaki",   rgba(195, 176, 145, 255));
 
-//    x_color_store("p", "pink",    x_color_make(255, 20, 147, 255));
-//    x_color_store("P", "purple",  x_color_make(128,0,128, 255));
+    __color_store("l", "lavender",rgba(240, 230, 140, 255));
+    __color_store("L", "lime",    rgba(191, 255, 0, 255));
 
-//    x_color_store("r", "red",     x_color_make(211, 1  , 2  , 255));
-//    x_color_store("R", "ruby",    x_color_make(224, 17, 95, 255));
+    __color_store("m", "magenta", rgba(211, 54 , 130, 255));
+    __color_store("M", "maroon",  rgba(128,0,0, 255));
+    __color_store("2", "midnight",rgba(25, 25, 112, 255));
 
-//    x_color_store("s", "silver",  x_color_make(192, 192, 192, 255));
-//    x_color_store("S", "sepia",  x_color_make(112, 66, 20, 255));
-//    x_color_store("3", "salmon",  x_color_make(250, 128, 114  , 255));
+    __color_store("n", "navy",    rgba(0,0,128, 255));
 
-//    x_color_store("t", "tan",  x_color_make(210, 180, 140, 255));
-//    x_color_store("T", "turquoise",  x_color_make(62, 224, 208, 255));
-//    x_color_store("4", "teal",  x_color_make(0, 128, 128 , 255));
+    __color_store("o", "orange",  rgba(253, 106, 2, 255));
+    __color_store("O", "olive",   rgba(128, 128, 0, 255));
 
-//    x_color_store("u", "umber",  x_color_make(99, 81, 71, 255));
-//    x_color_store("U", "ultramarine",  x_color_make(18, 10, 143, 255));
+    __color_store("p", "pink",    rgba(255, 20, 147, 255));
+    __color_store("P", "purple",  rgba(128,0,128, 255));
 
-//    x_color_store("v", "violet",  x_color_make(108, 113, 196, 255));
-//    x_color_store("V", "vanilla",  x_color_make(243, 229, 171, 255));
+    __color_store("r", "red",     rgba(211, 1  , 2  , 255));
+    __color_store("R", "ruby",    rgba(224, 17, 95, 255));
 
-//    x_color_store("w", "white",   x_color_make(238, 232, 213, 255));
-//    x_color_store("W", "wheat",   x_color_make(254, 222, 179, 255));
+    __color_store("s", "silver",  rgba(192, 192, 192, 255));
+    __color_store("S", "sepia",   rgba(112, 66, 20, 255));
+    __color_store("3", "salmon",  rgba(250, 128, 114  , 255));
 
-//    x_color_store("y", "yellow",  x_color_make(181, 137, 0  , 255));
+    __color_store("t", "tan",     rgba(210, 180, 140, 255));
+    __color_store("T", "turquoise",  rgba(62, 224, 208, 255));
+    __color_store("4", "teal",    rgba(0, 128, 128 , 255));
 
-////    __x_init_pallete();
-//}
+    __color_store("u", "umber",   rgba(99, 81, 71, 255));
+    __color_store("U", "ultramarine",  rgba(18, 10, 143, 255));
 
-//void x_color_show(X_Color color){
-//    printf("{%3d, %3d, %3d, %3d}\n", color.r, color.g, color.b, color.a);
-//}
+    __color_store("v", "violet",  rgba(108, 113, 196, 255));
+    __color_store("V", "vanilla", rgba(243, 229, 171, 255));
 
-//X_Color x_color_decode(const char * color){
-//    X_Color xc;
-//    if(__x_decode_rgba(color, &xc) || __x_decode_hex(color, &xc) || __x_color_load(color, &xc))
-//        return xc;
-//    printf("fail: X_Color \"%s\" could not be decoded\n", color);
-//    return xc;
-//}
+    __color_store("w", "white",   rgba(238, 232, 213, 255));
+    __color_store("W", "wheat",   rgba(254, 222, 179, 255));
+
+    __color_store("y", "yellow",  rgba(181, 137, 0  , 255));
+}
+
+void color_show(Color color) {
+    printf("{%3d, %3d, %3d, %3d}\n", color.r, color.g, color.b, color.a);
+}
+
+Color color(const char * format, ...) {
+    char color[1000];
+    va_list args;
+    va_start( args, format );
+    vsprintf(color, format, args);
+    va_end( args );
+
+    Color xc;
+    if(__decode_single_char(color, &xc) || 
+            __x_decode_rgba(color, &xc) ||
+              __decode_gray(color, &xc) || 
+               __decode_hex(color, &xc) ||
+           __decode_by_name(color, &xc))
+        return xc;
+    printf("fail: Color \"%s\" could not be decoded\n", color);
+    return xc;
+}
+
+void color_print_all() {
+    for(int i = 0; i < __arr_colors_size; i++) {
+        printf("%s: ", __arr_colors[i].key);
+        color_show(__arr_colors[i].color);
+    }
+}
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -8674,9 +8745,8 @@ void __x_init_pallete(void){
 #include <string.h> /* strcpy */
 #include <time.h>   /* time */
 
-void x_save_ppm(unsigned dimx, unsigned dimy, unsigned char * bitmap, const char * filename);
-void x_save_png(unsigned dimx, unsigned dimy, unsigned char * bitmap, const char * filename);
-void x_init_font();
+void save_ppm(unsigned dimx, unsigned dimy, unsigned char * bitmap, const char * filename);
+void save_png(unsigned dimx, unsigned dimy, unsigned char * bitmap, const char * filename);
 
 //#define XPPM
 
@@ -8694,8 +8764,6 @@ static uchar *   __board_bitmap  = NULL;
 static unsigned  __board_width  = 0;
 static unsigned  __board_height = 0;
 
-static uchar     __board_color[__X_BYTES_PER_PIXEL];
-
 static bool      __board_is_open = false;
 static bool      __board_lock = false;
 static char      __board_filename[200] = "";
@@ -8703,19 +8771,20 @@ static char      __board_viewer  [200] = "";
 static char      __board_folder  [200] = "";
 static int       __board_step          = 1;
 
-/* Local prototypes */
-uchar * __x_get_pixel_pos(unsigned int x, unsigned int y);
+static Transform __board_transform[10];
+static int       __board_transform_index = -1;
 
-uchar * __x_get_pixel_pos(unsigned x, unsigned y){
+/* Local prototypes */
+uchar * __pixel(unsigned int x, unsigned int y);
+
+uchar * __pixel(unsigned int x, unsigned int y) {
     return __board_bitmap + __X_BYTES_PER_PIXEL * (__board_width * y + x);
 }
 
-//plot sem as verificações de limite
-void __x_plot(int x, int y, uchar * color);
+//__plot sem as verificações de limite
+void __alpha_plot(int x, int y, Color color);
 
-
-
-void x_open(unsigned int width, unsigned int height, const char * filename){
+void open(unsigned int width, unsigned int height, const char * filename){
     if(__board_is_open){
         fprintf(stderr, "fail: bitmat already open\n");
         return;
@@ -8726,64 +8795,74 @@ void x_open(unsigned int width, unsigned int height, const char * filename){
     strcpy(__board_filename, filename);
 
     __board_bitmap = (uchar*) calloc(sizeof(uchar), width * height * __X_BYTES_PER_PIXEL);
-    __board_color[0] = 30;
-    __board_color[1] = 30;
-    __board_color[2] = 30;
-    __board_color[3] = 255;
-    x_clear();
+    background(rgba(30, 30, 30, 255));
 
-    __board_color[0] = 200;
-    __board_color[1] = 200;
-    __board_color[2] = 200;
-    __board_color[3] = 255;
+    // __stroke[0] = 200;
+    // __stroke[1] = 200;
+    // __stroke[2] = 200;
+    // __stroke[3] = 255;
 
-    __x_init_pallete();
+    __init_colors();
     __x_init_font();
     srand((unsigned) time(NULL));
 }
 
-int x_get_height(void){
+int height(void){
     return (int) __board_height;
 }
 
-int x_get_width(void){
+int width(void){
     return (int) __board_width;
 }
 
-uchar * x_get_bitmap(void){
+uchar * getBitmap(void){
     return __board_bitmap;
 }
 
-const char * x_get_filename(void){
+const char * getFilename(void){
     return __board_filename;
 }
 
-void x_close(void){
+void close(void){
     if(__board_bitmap != NULL){
         free(__board_bitmap);
         __board_is_open = false;
     }
     __board_is_open = false;
-    //TODO close font
 }
 
-void x_set_filename(const char * filename){
+
+void setFilename(const char * filename){
     if(filename != NULL)
         strcpy(__board_filename, filename);
     else
         strcpy(__board_filename, "");
 }
 
-void x_set_viewer(const char * viewer){
+void set_viewer(const char * viewer){
     if(viewer != NULL)
         strcpy(__board_viewer, viewer);
     else
         strcpy(__board_viewer, "");
 }
 
-void __x_plot(int x, int y, uchar * color) {
-    uchar * pos = __x_get_pixel_pos((unsigned) x, (unsigned) y);
+void __raw_plot(int x, int y, Color _color) {
+    uchar color[__X_BYTES_PER_PIXEL];
+    color[0] = _color.r;
+    color[1] = _color.g;
+    color[2] = _color.b;
+    color[3] = _color.a;
+    uchar * pos = __pixel((unsigned) x, (unsigned) y);
+    memcpy(pos, color, __X_BYTES_PER_PIXEL * sizeof(uchar));
+}
 
+void __alpha_plot(int x, int y, Color _color) {
+    uchar color[__X_BYTES_PER_PIXEL];
+    color[0] = _color.r;
+    color[1] = _color.g;
+    color[2] = _color.b;
+    color[3] = _color.a;
+    uchar * pos = __pixel((unsigned) x, (unsigned) y);
     for(int i = 0; i < 3; i++) {
         float fc = color[i] / 255.f;
         float fa = color[3] / 255.f;
@@ -8794,61 +8873,77 @@ void __x_plot(int x, int y, uchar * color) {
     }
 }
 
-void x_plot(int x, int y){
+// void __alias_plot(int x, int y, Color pixel) {
+//     if (x >= 1 && x < (int) __board_width && y >= 1 && y < (int) __board_height) {
+// // Atualize o pixel na posição (x, y) com o pixel fornecido
+//         // canvas[x][y] = pixel;
+//         __raw_plot(x, y, pixel);
+
+//         // Interpolação bilinear para calcular os valores dos pixels circundantes
+//         float alpha = (float)(pixel.a) / 255.0;
+//         float r = (float)(pixel.r) * alpha;
+//         float g = (float)(pixel.g) * alpha;
+//         float b = (float)(pixel.b) * alpha;
+
+//         // Pixels vizinhos
+//         int neighbors[4][2] = {{x-1, y}, {x+1, y}, {x, y-1}, {x, y+1}};
+//         float weights[4] = {0.25, 0.25, 0.25, 0.25};
+
+//         for (int i = 0; i < 4; ++i) {
+//             int nx = neighbors[i][0];
+//             int ny = neighbors[i][1];
+//             if (nx >= 0 && nx < 100 && ny >= 0 && ny < 100) {
+//                 float w = weights[i];
+//                 __pixel(nx, ny)[0] = (unsigned char)((float)__pixel(nx, ny)[0] * (1.0 - w) + r * w);
+//                 __pixel(nx, ny)[1] = (unsigned char)((float)__pixel(nx, ny)[1] * (1.0 - w) + g * w);
+//                 __pixel(nx, ny)[2] = (unsigned char)((float)__pixel(nx, ny)[2] * (1.0 - w) + b * w);
+//             }
+//         }
+//     }
+// }
+
+
+void __normal_plot(int x, int y,  Color color) {
+    if((x >= 0) && (x < (int) __board_width) && (y >= 0) && (y <  (int) __board_height)) {
+        __alpha_plot(x, y, color);
+    }
+}
+
+void __plot(int x, int y,  Color color) {
     if(!__board_is_open){
         fprintf(stderr, "fail: x_open(weight, width, filename) missing\n");
         exit(1);
     }
-    if((x >= 0) && (x < (int) __board_width) && (y >= 0) && (y <  (int) __board_height))
-        __x_plot(x, y, __board_color);
+    __normal_plot(x, y, color);
+    // __alias_plot(x, y, color);
 }
 
-X_Color x_get_pixel(int x, int y){
-    uchar * pixel = __x_get_pixel_pos((unsigned) x, (unsigned) y);
-    X_Color color;
+
+
+
+
+Color getPixel(int x, int y){
+    uchar * pixel = __pixel((unsigned) x, (unsigned) y);
+    Color color;
     memcpy(&color, pixel, __X_BYTES_PER_PIXEL * sizeof(uchar));
     return color;
 }
 
-void x_color_set(X_Color color){
-    memcpy(__board_color, &color, __X_BYTES_PER_PIXEL * sizeof(uchar));
-}
+void background(Color color){
+    uchar __color[__X_BYTES_PER_PIXEL];
+    memcpy(__color, &color, __X_BYTES_PER_PIXEL * sizeof(uchar));
 
-#ifdef __cplusplus
-
-void x_color_set(int r, int g, int b, int a) {
-    x_color_set(x_color_make(r, g, b, a));
-}
-void x_color_set(char color) {
-    x_color_load(color);
-}
-
-#endif
-
-void x_color_load(char color){
-    X_Color pcolor = x_color_get_palette(color);
-    memcpy(__board_color, &pcolor, __X_BYTES_PER_PIXEL * sizeof(uchar));
-}
-
-
-X_Color x_color_get(){
-    X_Color color;
-    memcpy(&color, __board_color, __X_BYTES_PER_PIXEL * sizeof(uchar));
-    return color;
-}
-
-void x_clear(void){
     unsigned x, y;
     for(x = 0; x < __board_width; x++)
         for(y = 0; y < __board_height; y++)
-            memcpy(__x_get_pixel_pos((unsigned) x, (unsigned) y), __board_color, __X_BYTES_PER_PIXEL * sizeof(uchar));
+            memcpy(__pixel((unsigned) x, (unsigned) y), __color, __X_BYTES_PER_PIXEL * sizeof(uchar));
 }
 
 void __x_save_buffer(const char * filename) {
 #ifndef XPPM
-    x_save_png(__board_width, __board_height, __board_bitmap, filename);
+    save_png(__board_width, __board_height, __board_bitmap, filename);
 #else
-    x_save_ppm(__board_width, __board_height, __board_bitmap, filename);
+    save_ppm(__board_width, __board_height, __board_bitmap, filename);
 #endif
 }
 
@@ -8860,7 +8955,9 @@ void __x_open_viewer() {
         if(strcmp(__board_viewer, "") != 0){
             sprintf(cmd, "%s %s%s&",__board_viewer, __board_filename, __board_extension);
             puts(cmd);
-            system(cmd);
+            int result = system(cmd);
+            if(result != 0)
+                printf("%d\n", result);
         }
     }
 }
@@ -8898,7 +8995,9 @@ void __x_lock(){
     if((__board_step != 0) && (rounds >= __board_step)){
         printf("(state: %i, step: %i): ", state, __board_step);
         char line[200];
-        fgets(line, sizeof(line), stdin);
+        if (fgets(line, sizeof(line), stdin) == NULL) {
+            puts("fgets error");
+        }
         char * ptr = line;
         int value = (int) strtol(line, &ptr, 10);
         if(ptr != line)
@@ -8910,7 +9009,7 @@ void __x_lock(){
 
 
 
-void x_save(){
+void save(){
     if (strcmp(__board_folder, "") != 0)
         __x_log();
     if (__board_lock)
@@ -8919,14 +9018,14 @@ void x_save(){
         __x_save();
 }
 
-void x_make_video(int framerate){
+void makeVideo(int framerate, const char * filename){
     char cmd[500];
     const char * folder = __board_folder;
     char * name = (char *) malloc((strlen(folder) + 20) * sizeof(char));
     strcpy(name, folder);
     if(folder[strlen(folder) - 1] != '/')
         strcat(name, "/");
-    sprintf(cmd, "ffmpeg -y -framerate %d -pattern_type glob -i '%s*.png' -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p video.mp4", framerate, name);
+    sprintf(cmd, "ffmpeg -y -framerate %d -pattern_type glob -i '%s*.png' -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p %s.mp4", framerate, name, filename);
     puts(cmd);
     int result = system(cmd);
     if(result != 0)
@@ -8934,17 +9033,17 @@ void x_make_video(int framerate){
     free(name);
 }
 
-void x_set_log(const char * folder) {
+void setLog(const char * folder) {
     strcpy(__board_folder, folder);
 }
 
-void x_set_lock(){
+void setLock(){
     __board_lock = true;
 }
 
-void x_save_ppm(unsigned dimx, unsigned dimy, unsigned char * bitmap, const char * filename){
+void save_ppm(unsigned dimx, unsigned dimy, unsigned char * bitmap, const char * filename){
     /* const int dimx = x_get_width();
-    const int dimy = x_get_height();
+    const int dimy = height();
      */
     char path[400];
     sprintf(path,"%s.ppm", filename);
@@ -8956,7 +9055,7 @@ void x_save_ppm(unsigned dimx, unsigned dimy, unsigned char * bitmap, const char
     fclose(fp);
 }
 
-void x_save_png(unsigned dimx, unsigned dimy, unsigned char * bitmap, const char * filename){
+void save_png(unsigned dimx, unsigned dimy, unsigned char * bitmap, const char * filename){
     char dest[500];
     strcpy(dest, filename);
     strcat(dest, ".png");
@@ -8966,21 +9065,196 @@ void x_save_png(unsigned dimx, unsigned dimy, unsigned char * bitmap, const char
         printf("error %u: %s\n", error, lodepng_error_text(error));
     }
 }
+
+void push() {
+    __board_transform_index += 1;
+    if(__board_transform_index >= 10){
+        fprintf(stderr, "fail: max stack size reached\n");
+        exit(1);
+    }
+    __board_transform[__board_transform_index] = (Transform) {0, 0, 1, 0};
+}
+
+void pop() {
+    if(__board_transform_index < 0){
+        fprintf(stderr, "fail: stack is empty\n");
+        exit(1);
+    }
+    __board_transform_index -= 1;
+}
+
+void translate(double dx, double dy) {
+    if(__board_transform_index < 0){
+        fprintf(stderr, "fail: stack is empty\n");
+        exit(1);
+    }
+    __board_transform[__board_transform_index].dx = dx;
+    __board_transform[__board_transform_index].dy = dy;
+}
+
+void scale(double s) {
+    if(__board_transform_index < 0){
+        fprintf(stderr, "fail: stack is empty\n");
+        exit(1);
+    }
+    __board_transform[__board_transform_index].s = s;
+}
+
+void rotate(double angle) {
+    if(__board_transform_index < 0){
+        fprintf(stderr, "fail: stack is empty\n");
+        exit(1);
+    }
+    __board_transform[__board_transform_index].angle = angle;
+}
+
+//pass x and y to all transformations in the stack
+V2d __transform(double x, double y) {
+    V2d point = v2d(x, y);
+    for(int i = 0; i <= __board_transform_index; i++) {
+        Transform t = __board_transform[i];
+        double angle = t.angle;
+        double x = point.x;
+        double y = point.y;
+        point.x = x * xcos(angle) - y * xsin(angle);
+        point.y = x * xsin(angle) + y * xcos(angle);
+        point.x *= t.s;
+        point.y *= t.s;
+        point.x += t.dx;
+        point.y += t.dy;
+    }
+    return point;
+}
+
+
+double __get_transform_scale() {
+    double s = 1;
+    for(int i = 0; i <= __board_transform_index; i++){
+        s *= __board_transform[i].s;
+    }
+    return s;
+}
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <inttypes.h>
+#include <stdbool.h>
+
+#include "math.h"
+
+static Color     __stroke = {0, 0, 0, 255};
+static Color     __fill = {255, 255, 255, 255};
+
+static bool      __stroke_enable = true;
+static bool      __fill_enable = true;
+static int       __thickness = 1;
+
+void __raw_line(int x0 , int y0 , int x1 , int y1, Color color);
+
+/* divida pela escala atual antes de fazer a transformação */
+void __point_scale(double x, double y, Color color);
+void __draw_line_scale(double x0 , double y0 , double x1 , double y1, Color color);
+/* desenha uma linha com anti aliasing com espessura de 1 pixel entre os pontos (x0, y0) e (x1, y1) */
+void __draw_line(double x0, double y0, double x1, double y1, Color color);
+/* linha sem anti aliasing */
+void __raw_sline(int x0, int y0, int x1, int y1, Color color);
+/* desenha uma linha com espessura de thickness pixels entre os pontos (x0, y0) e (x1, y1) */
+void __fill_line(double x0, double y0, double x1, double y1, int thickness, Color color);
+/* desenha um circulo dado centro e raio */
+void __fill_circle(double centerx, double centery, double radius);
+
+/* desenha uma elipse dentro do rect de ponto superior esquerdo(x0, y0), largura e altura */
+void __draw_ellipse(double x0, double y0, double width, double height);
+/* desenha uma elipse dentro do rect de ponto superior esquerdo(x0, y0), largura e altura */
+void __fill_ellipse(double x0, double y0, double width, double height);
+/* desenha um retangulo dados os cantos superior esquerdo (x0, y0), largura e altura */
+void __fill_rect(double x0, double y0, double width, double height);
+/* desenha um triangulo dados os 3 vertices */
+void __fill_raw_triangle(double v1x, double v1y, double v2x, double v2y, double v3x, double v3y, Color color);
 
 
-void x_plot(int x, int y);
-
-void __x_draw_block(int x, int y, int side){
+void __plot_block(int x, int y, int side, Color color){
     for(int i = x; i < x + side; i++)
         for(int j = y; j < y + side; j++)
-            x_plot(i, j);
+            __plot(i, j, color);
 }
 
-int x_draw_art(int x, int y, int zoom, const char * picture){
+void strokeWeight(int thickness){
+    __thickness = thickness;
+}
+
+
+void point(double x, double y, Color color){
+    V2d p = __transform(x, y);
+    __plot((int) p.x, (int) p.y, color);
+}
+
+void __point_scale(double x, double y, Color color){
+    double s = __get_transform_scale();
+    V2d p = __transform(x/s, y/s);
+    __plot((int) p.x, (int) p.y, color);
+}
+
+void stroke(Color color){
+    __stroke = color;
+    __stroke_enable = true;
+}
+
+// void stroke_rgba(uchar r, uchar g, uchar b, uchar a) {
+//     __stroke.r = r;
+//     __stroke.g = g;
+//     __stroke.b = b;
+//     __stroke.a = a;
+//     __stroke_enable = true;
+// }
+
+// void stroke_char(char c){
+//     __stroke = getPalette(c);
+//     __stroke_enable = true;
+// }
+
+void fill(Color color){
+    __fill = color;
+    __fill_enable = true;
+}
+
+// void fill_rgba(uchar r, uchar g, uchar b, uchar a) {
+//     __fill_enable = true;
+//     __fill.r = r;
+//     __fill.g = g;
+//     __fill.b = b;
+//     __fill.a = a;
+// }
+
+// void fill_char(char c){
+//     __fill = getPalette(c);
+//     __fill_enable = true;
+// }
+
+void noStroke(){
+    __stroke_enable = false;
+}
+
+void noFill(){
+    __fill_enable = false;
+}
+
+
+Color getStroke(){
+    return __stroke;
+}
+
+Color getFill(){
+    return __fill;
+}
+
+void __x_draw_block(int x, int y, int side, Color color){
+    for(int i = x; i < x + side; i++)
+        for(int j = y; j < y + side; j++)
+            point(i, j, color);
+}
+
+int ascArt(int x, int y, int zoom, const char * picture){
     int dx = 0;
     int dy = 0;
     int maxdx = 0;
@@ -8994,12 +9268,12 @@ int x_draw_art(int x, int y, int zoom, const char * picture){
         if(picture[i] == ' '){
             dx += 1;
         }else if(picture[i] == '#'){
-            __x_draw_block(x + dx * zoom, y + dy * zoom, zoom);
+            __x_draw_block(x + dx * zoom, y + dy * zoom, zoom, __stroke);
             dx += 1;
             maxdx = dx > maxdx ? dx : maxdx;
         }else{
-            x_color_load(picture[i]);
-            __x_draw_block(x + dx * zoom, y + dy * zoom, zoom);
+            char c[2] = {picture[i], '\0'};
+            __x_draw_block(x + dx * zoom, y + dy * zoom, zoom, color(c));
             dx += 1;
             maxdx = dx > maxdx ? dx : maxdx;
         }
@@ -9007,7 +9281,7 @@ int x_draw_art(int x, int y, int zoom, const char * picture){
     return (maxdx + 1) * zoom;
 }
 
-void x_draw_sline(int x0, int y0, int x1, int y1) {
+void __raw_sline(int x0, int y0, int x1, int y1, Color color) {
     /* Bresenham's Line Algorithm */
     int dx = (x0 > x1) ? x0 - x1 : x1 - x0;
     int dy = (y0 > y1) ? y0 - y1 : y1 - y0;
@@ -9016,7 +9290,7 @@ void x_draw_sline(int x0, int y0, int x1, int y1) {
     int err = dx - dy;
 
     while (1) {
-        x_plot(x0, y0);
+        __plot(x0, y0, color);
         if (x0 == x1 && y0 == y1) break;
         int e2 = 2 * err;
         if (e2 > -dy) {
@@ -9030,41 +9304,41 @@ void x_draw_sline(int x0, int y0, int x1, int y1) {
     }
 }
 
-void __x_fill_bottom_flat_triangle(float v1x, float v1y, float v2x, float v2y, float v3x, float v3y)
+void __x_fill_bottom_flat_triangle(double v1x, double v1y, double v2x, double v2y, double v3x, double v3y, Color color)
 {
-    float invslope1 = ((int)v2x - (int)v1x) / (float)((int)v2y - (int)v1y);
-    float invslope2 = ((int)v3x - (int)v1x) / (float)((int)v3y - (int)v1y);
+    double invslope1 = ((int)v2x - (int)v1x) / (double)((int)v2y - (int)v1y);
+    double invslope2 = ((int)v3x - (int)v1x) / (double)((int)v3y - (int)v1y);
 
-    float curx1 = v1x;
-    float curx2 = v1x;
+    double curx1 = v1x;
+    double curx2 = v1x;
     int scanlineY;
 
     for (scanlineY = v1y; scanlineY <= (int)v2y; scanlineY++){
-        x_draw_sline(curx1, scanlineY, curx2, scanlineY);
+        __raw_sline(curx1, scanlineY, curx2, scanlineY, color);
         curx1 += invslope1;
         curx2 += invslope2;
     }
 }
 
-void __x_fill_top_flat_triangle(float v1x, float v1y, float v2x, float v2y, float v3x, float v3y)
+void __x_fill_top_flat_triangle(double v1x, double v1y, double v2x, double v2y, double v3x, double v3y, Color color)
 {
-    float invslope1 = ((int)v3x - (int)v1x) / (float)((int)v3y - (int)v1y);
-    float invslope2 = ((int)v3x - (int)v2x) / (float)((int)v3y - (int)v2y);
+    double invslope1 = ((int)v3x - (int)v1x) / (double)((int)v3y - (int)v1y);
+    double invslope2 = ((int)v3x - (int)v2x) / (double)((int)v3y - (int)v2y);
 
-    float curx1 = v3x;
-    float curx2 = v3x;
+    double curx1 = v3x;
+    double curx2 = v3x;
 
     int scanlineY;
 
     for (scanlineY = v3y; scanlineY >= v1y; scanlineY--)
     {
-        x_draw_sline(curx1, scanlineY, curx2, scanlineY);
+        __raw_sline(curx1, scanlineY, curx2, scanlineY, color);
         curx1 -= invslope1;
         curx2 -= invslope2;
     }
 }
 
-void x_fill_triangle(float v1x, float v1y, float v2x, float v2y, float v3x, float v3y)
+void __fill_raw_triangle(double v1x, double v1y, double v2x, double v2y, double v3x, double v3y, Color color)
 {
     V2d v1 = {v1x, v1y};
     V2d v2 = {v2x, v2y};
@@ -9080,104 +9354,179 @@ void x_fill_triangle(float v1x, float v1y, float v2x, float v2y, float v3x, floa
     /* here we know that v1.y <= v2.y <= v3.y */
     /* check for trivial case of bottom-flat triangle */
     if (v2.y == v3.y)
-        __x_fill_bottom_flat_triangle(v1.x, v1.y, v2.x, v2.y, v3.x, v3.y);
+        __x_fill_bottom_flat_triangle(v1.x, v1.y, v2.x, v2.y, v3.x, v3.y, color);
     else if (v1.y == v2.y)
-        __x_fill_top_flat_triangle(v1.x, v1.y, v2.x, v2.y, v3.x, v3.y);
+        __x_fill_top_flat_triangle(v1.x, v1.y, v2.x, v2.y, v3.x, v3.y, color);
     else
     {
         /* general case - split the triangle in a topflat and bottom-flat one */
         V2d v4 = {0.f, 0.f};
-        v4.x = (v1.x + ((float)(v2.y - v1.y) / (float)(v3.y - v1.y)) * (v3.x - v1.x));
+        v4.x = (v1.x + ((double)(v2.y - v1.y) / (double)(v3.y - v1.y)) * (v3.x - v1.x));
         v4.y = v2.y;
-        __x_fill_bottom_flat_triangle(v1.x, v1.y, v2.x, v2.y, v4.x, v4.y);
-        __x_fill_top_flat_triangle(v2.x, v2.y, v4.x, v4.y, v3.x, v3.y);
+        __x_fill_bottom_flat_triangle(v1.x, v1.y, v2.x, v2.y, v4.x, v4.y, color);
+        __x_fill_top_flat_triangle(v2.x, v2.y, v4.x, v4.y, v3.x, v3.y, color);
     }
 }
 
-void x_fill_line(float x0, float y0, float x1, float y1, int thickness){
-    V2d a = {x0, y0};
-    V2d b = {x1, y1};
-    if(thickness == 1){
-        x_draw_line(a.x, a.y, b.x, b.y);
-        return;
-    }
+void __fill_line(double x0, double y0, double x1, double y1, int thickness, Color color){
+    V2d c0 = __transform(x0, y0);
+    V2d c1 = __transform(x1, y1);
+    V2d a = {c0.x, c0.y};
+    V2d b = {c1.x, c1.y};
 
-    V2d _offset = x_v2d_make(b.x - a.x, b.y - a.y);
-    _offset = x_v2d_dot(x_v2d_ortho(x_v2d_normalize(_offset)), (thickness / 2.f));
+    V2d _offset = v2d(b.x - a.x, b.y - a.y);
+    _offset = v2d_dot(v2d_ortho(v2d_normalize(_offset)), (thickness / 2.f));
 
-    V2d p1 = x_v2d_sub(a, _offset);
-    V2d p2 = x_v2d_sub(b, _offset);
-    V2d p3 = x_v2d_sum(a, _offset);
-    V2d p4 = x_v2d_sum(b, _offset);
+    V2d p1 = v2d_sub(a, _offset);
+    V2d p2 = v2d_sub(b, _offset);
+    V2d p3 = v2d_sum(a, _offset);
+    V2d p4 = v2d_sum(b, _offset);
 
-    x_fill_triangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
-    x_fill_triangle(p3.x, p3.y, p2.x, p2.y, p4.x, p4.y);
+    __fill_raw_triangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, color);
+    __fill_raw_triangle(p3.x, p3.y, p2.x, p2.y, p4.x, p4.y, color);
 }
 
-void x_fill_rect(int x0, int y0, int width, int height){
-    int i, x1 = x0 + width - 1, y1 = y0 + height - 1;
-    for(i = x0; i <= x1; i++)
-        x_draw_line(i, y0, i, y1);
+void __fill_rect(double x0, double y0, double width, double height){
+    V2d p0 = __transform(x0, y0);
+    V2d p1 = __transform(x0 + width, y0);
+    V2d p2 = __transform(x0 + width, y0 + height);
+    V2d p3 = __transform(x0, y0 + height);
+
+    __fill_raw_triangle(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, __fill);
+    __fill_raw_triangle(p0.x, p0.y, p2.x, p2.y, p3.x, p3.y, __fill);
+}
+
+void rect(double x, double y, double witdh, double height) {
+    if (__fill_enable) {
+        __fill_rect(x, y, witdh, height);
+    }
+    if (__stroke_enable) {
+        __fill_line(x, y, x + witdh, y, __thickness, __stroke);
+        __fill_line(x + witdh, y, x + witdh, y + height, __thickness, __stroke);
+        __fill_line(x + witdh, y + height, x, y + height, __thickness, __stroke);
+        __fill_line(x, y + height, x, y, __thickness, __stroke);
+    }
+}
+
+void triangle(double xa, double ya, double xb, double yb, double xc, double yc){
+    if(__fill_enable){
+        V2d a = __transform(xa, ya);
+        V2d b = __transform(xb, yb);
+        V2d c = __transform(xc, yc);
+        __fill_raw_triangle(a.x, a.y, b.x, b.y, c.x, c.y, __fill);
+    }
+    if(__stroke_enable){
+        __fill_line(xa, ya, xb, yb, __thickness, __stroke);
+        __fill_line(xb, yb, xc, yc, __thickness, __stroke);
+        __fill_line(xc, yc, xa, ya, __thickness, __stroke);
+    }
+}
+
+void square(double x, double y, double side) {
+    rect(x, y, side, side);
 }
 
 /* https://en.wikipedia.org/wiki/Midpoint_circle_algorithm */
-void x_draw_circle(int centerx, int centery, int radius){
+// void __draw_circle(double centerx, double centery, double radius){
+//     int x = radius - 1;
+//     int y = 0;
+//     int dx = 1;
+//     int dy = 1;
+//     int err = dx - ((int) radius << 1);
+//     while(x >= y){
+//         __point_scale((centerx + x), (centery + y), __stroke);
+//         __point_scale((centerx - x), (centery + y), __stroke);
+//         __point_scale((centerx + x), (centery - y), __stroke);
+//         __point_scale((centerx - x), (centery - y), __stroke);
+//         __point_scale((centerx + y), (centery + x), __stroke);
+//         __point_scale((centerx - y), (centery + x), __stroke);
+//         __point_scale((centerx - y), (centery - x), __stroke);
+//         __point_scale((centerx + y), (centery - x), __stroke);
+
+//         if(err <= 0){
+//             y++;
+//             err += dy;
+//             dy += 2;
+//         }else{
+//             x--;
+//             dx += 2;
+//             err += dx - ((int) radius << 1);
+//         }
+//     }
+// }
+
+// void __draw_circle(double centerx, double centery, double radius) {
+//     int thickness = __thickness;
+//     // Definindo as coordenadas do círculo
+//     int x = radius - 1;
+//     int y = 0;
+//     int dx = 1;
+//     int dy = 1;
+//     int err = dx - (int)(radius * 2);
+
+//     // Desenha o círculo utilizando o algoritmo do ponto médio
+//     while (x >= y) {
+//         for (int i = 0; i < thickness; i++) {
+//             // Desenha os pontos simétricos em todas as oito octantes
+//             __point_scale((centerx + x), (centery + y + i), __stroke);
+//             __point_scale((centerx + y), (centery + x + i), __stroke);
+//             __point_scale((centerx - y), (centery + x + i), __stroke);
+//             __point_scale((centerx - x), (centery + y + i), __stroke);
+//             __point_scale((centerx - x), (centery - y - i), __stroke);
+//             __point_scale((centerx - y), (centery - x - i), __stroke);
+//             __point_scale((centerx + y), (centery - x - i), __stroke);
+//             __point_scale((centerx + x), (centery - y - i), __stroke);
+//         }
+
+//         if (err <= 0) {
+//             y++;
+//             err += dy;
+//             dy += 2;
+//         }
+
+//         if (err > 0) {
+//             x--;
+//             dx += 2;
+//             err += dx - (int)(radius * 2);
+//         }
+//     }
+// }
+
+void __fill_circle(double centerx, double centery, double radius){
+    V2d center = __transform(centerx, centery);
+    centerx = center.x;
+    centery = center.y;
+
+    radius *= __get_transform_scale();
+
     int x = radius - 1;
     int y = 0;
     int dx = 1;
     int dy = 1;
-    int err = dx - (radius << 1);
+    int err = dx - ((int) radius << 1);
+    int * lined = (int *) calloc(2 * (int) radius + 1, sizeof(int));
     while(x >= y){
-        x_plot(centerx + x, centery + y);
-        x_plot(centerx - x, centery + y);
-        x_plot(centerx + x, centery - y);
-        x_plot(centerx - x, centery - y);
-        x_plot(centerx + y, centery + x);
-        x_plot(centerx - y, centery + x);
-        x_plot(centerx - y, centery - x);
-        x_plot(centerx + y, centery - x);
-
-        if(err <= 0){
-            y++;
-            err += dy;
-            dy += 2;
-        }else{
-            x--;
-            dx += 2;
-            err += dx - (radius << 1);
+        if(lined[(int)(y + radius)] == 0){
+            __raw_sline(centerx + x, centery + y, centerx - x, centery + y, __fill);
+            lined[(int)(y + radius)] = 1;
         }
-    }
-}
-
-void x_fill_circle(int centerx, int centery, int radius){
-    int x = radius - 1;
-    int y = 0;
-    int dx = 1;
-    int dy = 1;
-    int err = dx - (radius << 1);
-    int * lined = (int *) calloc(2 * radius, sizeof(int));
-    while(x >= y){
-        if(lined[y + radius] == 0){
-            x_draw_sline(centerx + x, centery + y, centerx - x, centery + y);
-            lined[y + radius] = 1;
+        if(lined[(int)(-y + radius)] == 0){
+            __raw_sline(centerx + x, centery - y, centerx - x, centery - y, __fill);
+            lined[(int)(-y + radius)] = 1;
         }
-        if(lined[-y + radius] == 0){
-            x_draw_sline(centerx + x, centery - y, centerx - x, centery - y);
-            lined[-y + radius] = 1;
+        if(lined[(int)(x + radius)] == 0){
+            __raw_sline(centerx + y, centery + x, centerx - y, centery + x, __fill);
+            lined[(int)(x + radius)] = 1;
         }
-        if(lined[x + radius] == 0){
-            x_draw_sline(centerx + y, centery + x, centerx - y, centery + x);
-            lined[x + radius] = 1;
-        }
-        if(lined[-x + radius] == 0){
-            x_draw_sline(centerx - y, centery - x, centerx + y, centery - x);
-            lined[-x + radius] = 1;
+        if(lined[(int)(-x + radius)] == 0){
+            __raw_sline(centerx - y, centery - x, centerx + y, centery - x, __fill);
+            lined[(int)(-x + radius)] = 1;
         }
         /* 
-        x_draw_sline(centerx + x, centery + y, centerx - x, centery + y);
-        x_draw_sline(centerx + x, centery - y, centerx - x, centery - y);
-        x_draw_sline(centerx + y, centery + x, centerx - y, centery + x);
-        x_draw_sline(centerx - y, centery - x, centerx + y, centery - x);
+        __raw_sline(centerx + x, centery + y, centerx - x, centery + y);
+        __raw_sline(centerx + x, centery - y, centerx - x, centery - y);
+        __raw_sline(centerx + y, centery + x, centerx - y, centery + x);
+        __raw_sline(centerx - y, centery - x, centerx + y, centery - x);
          */
         if(err <= 0){
             y++;
@@ -9186,63 +9535,141 @@ void x_fill_circle(int centerx, int centery, int radius){
         }else{
             x--;
             dx += 2;
-            err += dx - (radius << 1);
+            err += dx - ((int) radius << 1);
         }
     }
     free(lined);
 }
 
-void x_draw_ellipse(int x0, int y0, int width, int height){
-    int x1 = x0 + width - 1, y1 = y0 + height - 1;
-    int a = abs(x1-x0), b = abs(y1-y0), b1 = b&1; /* values of diameter */
-    long dx = 4*(1-a)*b*b, dy = 4*(b1+1)*a*a; /* error increment */
-    long err = dx+dy+b1*a*a, e2; /* error of 1.step */
 
-    if (x0 > x1) { x0 = x1; x1 += a; } /* if called with swapped points */
-    if (y0 > y1) y0 = y1; /* .. exchange them */
-    y0 += (b+1)/2; y1 = y0-b1;   /* starting pixel */
-    a *= 8*a; b1 = 8*b*b;
 
-    do {
-        x_plot(x1, y0); /*   I. Quadrant */
-        x_plot(x0, y0); /*  II. Quadrant */
-        x_plot(x0, y1); /* III. Quadrant */
-        x_plot(x1, y1); /*  IV. Quadrant */
-        e2 = 2*err;
-        if (e2 <= dy) { y0++; y1--; err += dy += a; }  /* y step */
-        if (e2 >= dx || 2*err > dy) { x0++; x1--; err += dx += b1; } /* x step */
-    } while (x0 <= x1);
+// void __draw_ellipse(double x0, double y0, double width, double height){
+//     x0 = x0 - width / 2;
+//     y0 = y0 - height / 2;
 
-    while (y0-y1 < b) {  /* too early stop of flat ellipses a=1 */
-        x_plot(x0-1, y0); /* -> finish tip of ellipse */
-        x_plot(x1+1, y0++);
-        x_plot(x0-1, y1);
-        x_plot(x1+1, y1--);
+//     int x1 = x0 + width - 1, y1 = y0 + height - 1;
+//     int a = xfabs(x1-x0), b = xfabs(y1-y0), b1 = b&1; /* values of diameter */
+//     long dx = 4*(1-a)*b*b, dy = 4*(b1+1)*a*a; /* error increment */
+//     long err = dx+dy+b1*a*a, e2; /* error of 1.step */
+
+//     if (x0 > x1) { x0 = x1; x1 += a; } /* if called with swapped points */
+//     if (y0 > y1) y0 = y1; /* .. exchange them */
+//     y0 += (b+1)/2; y1 = y0-b1;   /* starting pixel */
+//     a *= 8*a; b1 = 8*b*b;
+
+//     do {
+//         __point_scale(x1, y0, __stroke); /*   I. Quadrant */
+//         __point_scale(x0, y0, __stroke); /*  II. Quadrant */
+//         __point_scale(x0, y1, __stroke); /* III. Quadrant */
+//         __point_scale(x1, y1, __stroke); /*  IV. Quadrant */
+//         e2 = 2*err;
+//         if (e2 <= dy) { y0++; y1--; err += dy += a; }  /* y step */
+//         if (e2 >= dx || 2*err > dy) { x0++; x1--; err += dx += b1; } /* x step */
+//     } while (x0 <= x1);
+
+//     while (y0-y1 < b) {  /* too early stop of flat ellipses a=1 */
+//         __point_scale((x0-1), (y0  ), __stroke); /* -> finish tip of ellipse */
+//         __point_scale((x1+1), (y0++), __stroke);
+//         __point_scale((x0-1), (y1  ), __stroke);
+//         __point_scale((x1+1), (y1--), __stroke);
+//     }
+// }
+
+void __draw_ellipse(double centerx, double centery, double width, double height) {
+    double radius_x = width / 2;
+    double radius_y = height / 2;
+    int thickness = __thickness;
+    // Definindo as coordenadas iniciais
+    double x = 0;
+    double y = radius_y;
+    double d1 = (radius_y * radius_y) - (radius_x * radius_x * radius_y) + (0.25 * radius_x * radius_x);
+    double dx = 2 * radius_y * radius_y * x;
+    double dy = 2 * radius_x * radius_x * y;
+
+    // Desenha a metade superior da elipse
+    while (dx < dy) {
+        for (int i = 0; i < thickness; i++) {
+            __point_scale(centerx + x, centery + y + i, __stroke);
+            __point_scale(centerx - x, centery + y + i, __stroke);
+            __point_scale(centerx + x, centery - y - i, __stroke);
+            __point_scale(centerx - x, centery - y - i, __stroke);
+
+            __point_scale(centerx + x + i, centery + y, __stroke);
+            __point_scale(centerx - x - i, centery + y, __stroke);
+            __point_scale(centerx + x + i, centery - y, __stroke);
+            __point_scale(centerx - x - i, centery - y, __stroke);
+        }
+
+        x++;
+        dx += 2 * radius_y * radius_y;
+        if (d1 < 0) {
+            d1 += dx + radius_y * radius_y;
+        } else {
+            y--;
+            dy -= 2 * radius_x * radius_x;
+            d1 += dx - dy + radius_y * radius_y;
+        }
+    }
+
+    // Desenha a metade inferior da elipse
+    double d2 = ((radius_y * radius_y) * ((x + 0.5) * (x + 0.5))) +
+                ((radius_x * radius_x) * ((y - 1) * (y - 1))) -
+                (radius_x * radius_x * radius_y * radius_y);
+
+    while (y >= 0) {
+        for (int i = 0; i < thickness; i++) {
+            __point_scale(centerx + x, centery + y + i, __stroke);
+            __point_scale(centerx - x, centery + y + i, __stroke);
+            __point_scale(centerx + x, centery - y - i, __stroke);
+            __point_scale(centerx - x, centery - y - i, __stroke);
+
+            __point_scale(centerx + x + i, centery + y, __stroke);
+            __point_scale(centerx - x - i, centery + y, __stroke);
+            __point_scale(centerx + x + i, centery - y, __stroke);
+            __point_scale(centerx - x - i, centery - y, __stroke);
+        }
+
+        y--;
+        dy -= 2 * radius_x * radius_x;
+        if (d2 > 0) {
+            d2 += radius_x * radius_x - dy;
+        } else {
+            x++;
+            dx += 2 * radius_y * radius_y;
+            d2 += dx - dy + radius_x * radius_x;
+        }
     }
 }
 
-void x_fill_ellipse(int x0, int y0, int width, int height){
-    int ytop = y0;
-    int x1 = x0 + width - 1, y1 = y0 + height - 1;
-    int a = abs(x1-x0), b = abs(y1-y0), b1 = b&1; /* values of diameter */
-    long dx = 4*(1-a)*b*b, dy = 4*(b1+1)*a*a; /* error increment */
-    long err = dx+dy+b1*a*a, e2; /* error of 1.step */
+void __fill_ellipse(double x0, double y0, double width, double height){
+    x0 -= width / 2;
+    y0 -= height / 2;
+
+    // V2d p0 = __transform(x0, y0);
+
+    double ytop = y0;
+    double x1 = x0 + width - 1, y1 = y0 + height - 1;
+    double a = xfabs(x1-x0);
+    double b = xfabs(y1-y0);
+    int b1 = (int)b&1; /* values of diameter */
+    double dx = 4*(1-a)*b*b, dy = 4*(b1+1)*a*a; /* error increment */
+    double err = dx+dy+b1*a*a, e2; /* error of 1.step */
 
     if (x0 > x1) { x0 = x1; x1 += a; } /* if called with swapped points */
     if (y0 > y1) y0 = y1; /* .. exchange them */
     y0 += (b+1)/2; y1 = y0-b1;   /* starting pixel */
     a *= 8*a; b1 = 8*b*b;
     
-    int * lined = (int *) calloc(height, sizeof(int));
+    int * lined = (int *) calloc((int) (height + 1), sizeof(int));
     
     do {
-        if(lined[y0 - ytop] == 0){
-            x_draw_sline(x1, y0, x0, y0); /*   I. Quadrant */
-            lined[y0 - ytop] = 1;
+        if(lined[(int)(y0 - ytop)] == 0){
+            __draw_line_scale(x1, y0, x0, y0, __fill); /*   I. Quadrant */
+            lined[(int)(y0 - ytop)] = 1;
         }
-        if(lined[y1 - ytop] == 0){
-            x_draw_sline(x0, y1, x1, y1); /* III. Quadrant */
-            lined[y1 - ytop] = 1;
+        if(lined[(int)(y1 - ytop)] == 0){
+            __draw_line_scale(x0, y1, x1, y1, __fill); /* III. Quadrant */
+            lined[(int)(y1 - ytop)] = 1;
         }
         e2 = 2*err;
         if (e2 <= dy) { y0++; y1--; err += dy += a; }  /* y step */
@@ -9250,12 +9677,32 @@ void x_fill_ellipse(int x0, int y0, int width, int height){
     } while (x0 <= x1);
 
     while (y0-y1 < b) {  /* too early stop of flat ellipses a=1 */
-        x_plot(x0-1, y0); /* -> finish tip of ellipse */
-        x_plot(x1+1, y0++);
-        x_plot(x0-1, y1);
-        x_plot(x1+1, y1--);
+        __point_scale((x0-1), (y0  ), __fill); /* -> finish tip of ellipse */
+        __point_scale((x1+1), (y0++), __fill);
+        __point_scale((x0-1), (y1  ), __fill);
+        __point_scale((x1+1), (y1--), __fill);
     }
     free(lined);
+}
+
+void ellipse(double x0, double y0, double width, double height) {
+    double s = __get_transform_scale();
+    if (__fill_enable) {
+        __fill_ellipse(x0 * s, y0 * s, width * s, height * s);
+    }
+    if (__stroke_enable) {
+        __draw_ellipse(x0 * s, y0 * s, width * s, height * s);
+    }
+}
+
+void circle(int x0, int y0, int diameter){
+    if(__fill_enable){
+        __fill_circle(x0, y0, diameter / 2);
+    }
+    if(__stroke_enable){
+        double s = __get_transform_scale();
+        __draw_ellipse(x0 * s, y0 * s, diameter * s, diameter * s);
+    }
 }
 
 void __x_plot_quad_bezier_seg(int x0, int y0, int x1, int y1, int x2, int y2)
@@ -9280,46 +9727,46 @@ void __x_plot_quad_bezier_seg(int x0, int y0, int x1, int y1, int x2, int y2)
         dy = 4.0*sx*cur*(y0-y1)+yy-xy;
         xx += xx; yy += yy; err = dx+dy+xy;                /* error 1st step */
         do {
-            x_plot(x0,y0);                                     /* plot curve */
+            point(x0,y0, __stroke);                                     /* plot curve */
             if (x0 == x2 && y0 == y2) return;  /* last pixel -> curve finished */
             y1 = 2*err < dx;                  /* save value for test of y step */
             if (2*err > dy) { x0 += sx; dx -= xy; err += dy += yy; } /* x step */
             if (    y1    ) { y0 += sy; dy -= xy; err += dx += xx; } /* y step */
         } while (dy < dx );           /* gradient negates -> algorithm fails */
     }
-    x_draw_sline(x0, y0, x2, y2);                  /* plot remaining part to end */
+    __raw_sline(x0, y0, x2, y2, __stroke);                  /* plot remaining part to end */
 }
-void x_draw_bezier(int x0, int y0, int x1, int y1, int x2, int y2)
-{                                          /* plot any quadratic Bezier curve */
-    int x = x0-x1, y = y0-y1;
-    double t = x0-2*x1+x2, r;
+// void draw_bezier(int x0, int y0, int x1, int y1, int x2, int y2)
+// {                                          /* plot any quadratic Bezier curve */
+//     int x = x0-x1, y = y0-y1;
+//     double t = x0-2*x1+x2, r;
 
-    if ((long)x*(x2-x1) > 0) {                        /* horizontal cut at P4? */
-        if ((long)y*(y2-y1) > 0)                     /* vertical cut at P6 too? */
-            if (x_math_fabs((y0-2*y1+y2)/t*x) > abs(y)) {               /* which first? */
-                x0 = x2; x2 = x+x1; y0 = y2; y2 = y+y1;            /* swap points */
-            }                            /* now horizontal cut at P4 comes first */
-        t = (x0-x1)/t;
-        r = (1-t)*((1-t)*y0+2.0*t*y1)+t*t*y2;                       /* By(t=P4) */
-        t = (x0*x2-x1*x1)*t/(x0-x1);                       /* gradient dP4/dx=0 */
-        x = x_math_floor(t+0.5); y = x_math_floor(r+0.5);
-        r = (y1-y0)*(t-x0)/(x1-x0)+y0;                  /* intersect P3 | P0 P1 */
-        __x_plot_quad_bezier_seg(x0,y0, x,x_math_floor(r+0.5), x,y);
-        r = (y1-y2)*(t-x2)/(x1-x2)+y2;                  /* intersect P4 | P1 P2 */
-        x0 = x1 = x; y0 = y; y1 = x_math_floor(r+0.5);             /* P0 = P4, P1 = P8 */
-    }
-    if ((long)(y0-y1)*(y2-y1) > 0) {                    /* vertical cut at P6? */
-        t = y0-2*y1+y2; t = (y0-y1)/t;
-        r = (1-t)*((1-t)*x0+2.0*t*x1)+t*t*x2;                       /* Bx(t=P6) */
-        t = (y0*y2-y1*y1)*t/(y0-y1);                       /* gradient dP6/dy=0 */
-        x = x_math_floor(r+0.5); y = x_math_floor(t+0.5);
-        r = (x1-x0)*(t-y0)/(y1-y0)+x0;                  /* intersect P6 | P0 P1 */
-        __x_plot_quad_bezier_seg(x0,y0, x_math_floor(r+0.5),y, x,y);
-        r = (x1-x2)*(t-y2)/(y1-y2)+x2;                  /* intersect P7 | P1 P2 */
-        x0 = x; x1 = x_math_floor(r+0.5); y0 = y1 = y;             /* P0 = P6, P1 = P7 */
-    }
-    __x_plot_quad_bezier_seg(x0,y0, x1,y1, x2,y2);                  /* remaining part */
-}
+//     if ((long)x*(x2-x1) > 0) {                        /* horizontal cut at P4? */
+//         if ((long)y*(y2-y1) > 0)                     /* vertical cut at P6 too? */
+//             if (xfabs((y0-2*y1+y2)/t*x) > abs(y)) {               /* which first? */
+//                 x0 = x2; x2 = x+x1; y0 = y2; y2 = y+y1;            /* swap points */
+//             }                            /* now horizontal cut at P4 comes first */
+//         t = (x0-x1)/t;
+//         r = (1-t)*((1-t)*y0+2.0*t*y1)+t*t*y2;                       /* By(t=P4) */
+//         t = (x0*x2-x1*x1)*t/(x0-x1);                       /* gradient dP4/dx=0 */
+//         x = xfloor(t+0.5); y = xfloor(r+0.5);
+//         r = (y1-y0)*(t-x0)/(x1-x0)+y0;                  /* intersect P3 | P0 P1 */
+//         __x_plot_quad_bezier_seg(x0,y0, x, xfloor(r+0.5), x,y);
+//         r = (y1-y2)*(t-x2)/(x1-x2)+y2;                  /* intersect P4 | P1 P2 */
+//         x0 = x1 = x; y0 = y; y1 = xfloor(r+0.5);             /* P0 = P4, P1 = P8 */
+//     }
+//     if ((long)(y0-y1)*(y2-y1) > 0) {                    /* vertical cut at P6? */
+//         t = y0-2*y1+y2; t = (y0-y1)/t;
+//         r = (1-t)*((1-t)*x0+2.0*t*x1)+t*t*x2;                       /* Bx(t=P6) */
+//         t = (y0*y2-y1*y1)*t/(y0-y1);                       /* gradient dP6/dy=0 */
+//         x = xfloor(r+0.5); y = xfloor(t+0.5);
+//         r = (x1-x0)*(t-y0)/(y1-y0)+x0;                  /* intersect P6 | P0 P1 */
+//         __x_plot_quad_bezier_seg(x0,y0, xfloor(r+0.5),y, x,y);
+//         r = (x1-x2)*(t-y2)/(y1-y2)+x2;                  /* intersect P7 | P1 P2 */
+//         x0 = x; x1 = xfloor(r+0.5); y0 = y1 = y;             /* P0 = P6, P1 = P7 */
+//     }
+//     __x_plot_quad_bezier_seg(x0,y0, x1,y1, x2,y2);                  /* remaining part */
+// }
 
 /* https://github.com/Jnmattern/Minimalist_2.0/blob/master/src/bitmap.h */
 #define __TRIG_MAX (1<<24)
@@ -9337,8 +9784,9 @@ const int32_t __sinTable__[91] = {
     16766995, 16774660, 16777216
 };
 
-static int32_t __SIN(int d) {
-    d = d%360;
+static double __SIN(double value) {
+    // return sin(value);
+    int d = (int)value%360;
     if (d < 90) {
         return __sinTable__[d];
     } else if (d < 180) {
@@ -9350,8 +9798,9 @@ static int32_t __SIN(int d) {
     }
 }
 
-static int32_t __COS(int d) {
-    d = d%360;
+static double __COS(double value) {
+    // return cos(value);
+    int d = (int)value%360;
     if (d < 90) {
         return __sinTable__[90-d];
     } else if (d < 180) {
@@ -9364,10 +9813,11 @@ static int32_t __COS(int d) {
 }
 
 /* begin should be smaller than end, and both must be in interval [0, 360] */
-void __x_fill_arc(float centerx, float centery, int radius, int thickness, int degrees_begin, int degrees_end) {
+void __x_fill_arc(double centerx, double centery, int diameter, int thickness, int degrees_begin, int degrees_end, Color color) {
+    double radius = diameter / 2;
     V2d center = {centerx, centery};
-    float sslope = (float)__COS(degrees_begin) / (float)__SIN(degrees_begin);
-    float eslope = (float)__COS(degrees_end) / (float)__SIN(degrees_end);
+    double sslope = (double)__COS(degrees_begin) / (double)__SIN(degrees_begin);
+    double eslope = (double)__COS(degrees_end) / (double)__SIN(degrees_end);
 
     if (degrees_end == 360) eslope = -1000000;
 
@@ -9396,13 +9846,13 @@ void __x_fill_arc(float centerx, float centery, int radius, int thickness, int d
                             (y == 0 && degrees_begin == 0 && x > 0)
                     )
                     )
-                x_plot(center.x+x, center.y-y);
+                point(center.x+x, center.y-y, color);
         }
     }
 
 }
 
-void x_fill_arc(float centerx, float centery, int radius, int thickness, int degrees_begin, int degrees_lenght){
+void __arc(double centerx, double centery, int diameter, int thickness, int degrees_begin, int degrees_lenght, Color color){
     if(degrees_lenght % 360 == 0)
         degrees_lenght = 360;
     else
@@ -9417,41 +9867,71 @@ void x_fill_arc(float centerx, float centery, int radius, int thickness, int deg
     int degrees_end = degrees_begin + degrees_lenght;
 
     if(degrees_end <= 360){
-        __x_fill_arc(centerx, centery, radius, thickness, degrees_begin, degrees_end);
+        __x_fill_arc(centerx, centery, diameter, thickness, degrees_begin, degrees_end, color);
     }else{
-        __x_fill_arc(centerx, centery, radius, thickness, degrees_begin, 360);
-        __x_fill_arc(centerx, centery, radius, thickness, 0, degrees_end - 360);
+        __x_fill_arc(centerx, centery, diameter, thickness, degrees_begin, 360, color);
+        __x_fill_arc(centerx, centery, diameter, thickness, 0, degrees_end - 360, color);
     }
 }
 
 
+void arc(double centerx, double centery, int diameter, int thickness, int degrees_begin, int degrees_lenght) {
+    if (__fill_enable) {
+        __arc(centerx, centery, diameter, thickness, degrees_begin, degrees_lenght, __fill);
+    }
+    if (__stroke_enable) {
+        __arc(centerx, centery, diameter, __thickness, degrees_begin, degrees_lenght, __stroke);
+        __arc(centerx, centery, diameter - 2 *  thickness, __thickness, degrees_begin, degrees_lenght, __stroke);
+
+        //draw a line from begin point to end point
+        //convert degrees to radians
+        {
+            double c = xcos(degrees_begin);
+            double s = xsin(degrees_begin);
+            double x0 = centerx + (diameter / 2) * c;
+            double y0 = centery - (diameter / 2) * s;
+            double x1 = centerx + (-thickness + diameter / 2) * c;
+            double y1 = centery - (-thickness + diameter / 2) * s;
+            line(x0, y0, x1, y1);
+        }
+        {
+            double c = xcos(degrees_begin + degrees_lenght);
+            double s = xsin(degrees_begin + degrees_lenght);
+            double x0 = centerx + (diameter / 2) * c;
+            double y0 = centery - (diameter / 2) * s;
+            double x1 = centerx + (-thickness + diameter / 2) * c;
+            double y1 = centery - (-thickness + diameter / 2) * s;
+            line(x0, y0, x1, y1);
+        }
+    }
+    
+}
+
 //returns fractional part of a number
-float __m_fractional (float x) {
+double __m_fractional (double x) {
     return x > 0 ? x - (int) x : x - ((int) x + 1);
 }
 
 //returns 1 - fractional part of number
-float __r_fractional(float x) {
+double __r_fractional(double x) {
 	return 1 - __m_fractional(x);
 }
 
 // draws a pixel on screen of given brightness
 // 0<=brightness<=1. We can use your own library
 // to draw on screen
-void __plot_bright_pixel( int x , int y , X_Color color, float brightness)
+void __plot_raw_bright_pixel( int x , int y , Color color, double brightness)
 {
-    uchar r = color.r * brightness;
-    uchar g = color.g * brightness;
-    uchar b = color.b * brightness;
-    uchar a = color.a * brightness;
-    x_color_set((X_Color) {r, g, b,  a});
-    x_plot(x, y);
+    color.r = color.r * brightness;
+    color.g = color.g * brightness;
+    color.b = color.b * brightness;
+    color.a = color.a * brightness;
+
+    __plot(x, y, color);
 }
 
-void x_draw_line(int x0 , int y0 , int x1 , int y1) {
-    X_Color backup_color = x_color_get();
-
-	int steep = x_math_fabs(y1 - y0) > x_math_fabs(x1 - x0) ;
+void __raw_line(int x0 , int y0 , int x1 , int y1, Color color) {
+	int steep = xfabs(y1 - y0) > xfabs(x1 - x0) ;
 
 	// swap the co-ordinates if slope > 1 or we
 	// draw backwards
@@ -9465,37 +9945,158 @@ void x_draw_line(int x0 , int y0 , int x1 , int y1) {
 	}
 
 	//compute the slope
-	float dx = x1-x0;
-	float dy = y1-y0;
-	float gradient = dy/dx;
+	double dx = x1-x0;
+	double dy = y1-y0;
+	double gradient = dy/dx;
 	if (dx == 0.0)
 		gradient = 1;
 
 	int xpxl1 = x0;
 	int xpxl2 = x1;
-	float intersectY = y0;
+	double intersectY = y0;
 
 	// main loop
 	if (steep) {
 		for (int x = xpxl1 ; x <=xpxl2 ; x++) {
 			// pixel coverage is determined by fractional
 			// part of y co-ordinate
-			__plot_bright_pixel((int) intersectY    , x, backup_color, __r_fractional(intersectY));
-			__plot_bright_pixel((int) intersectY + 1, x, backup_color, __m_fractional(intersectY));
+			__plot_raw_bright_pixel((int) intersectY    , x, color, __r_fractional(intersectY));
+			__plot_raw_bright_pixel((int) intersectY + 1, x, color, __m_fractional(intersectY));
 			intersectY += gradient;
 		}
 	} else {
 		for (int x = xpxl1 ; x <=xpxl2 ; x++) {
 			// pixel coverage is determined by fractional
 			// part of y co-ordinate
-			__plot_bright_pixel(x, (int) intersectY    , backup_color, __r_fractional(intersectY));
-			__plot_bright_pixel(x, (int) intersectY + 1, backup_color, __m_fractional(intersectY));
+			__plot_raw_bright_pixel(x, (int) intersectY    , color, __r_fractional(intersectY));
+			__plot_raw_bright_pixel(x, (int) intersectY + 1, color, __m_fractional(intersectY));
 			intersectY += gradient;
 		}
 	}
-    x_color_set(backup_color);
 }
 
+
+void __draw_line(double x0 , double y0 , double x1 , double y1, Color color) {
+    V2d origin = __transform(x0, y0);
+    V2d destiny = __transform(x1, y1);
+    x0 = origin.x;
+    y0 = origin.y;
+    x1 = destiny.x;
+    y1 = destiny.y;
+    __raw_line(x0, y0, x1, y1, color);
+}
+
+void __draw_line_scale(double x0 , double y0 , double x1 , double y1, Color color) {
+    double s = __get_transform_scale();
+    V2d origin = __transform(x0/s, y0/s);
+    V2d destiny = __transform(x1/s, y1/s);
+    x0 = origin.x;
+    y0 = origin.y;
+    x1 = destiny.x;
+    y1 = destiny.y;
+    __raw_line(x0, y0, x1, y1, color);
+}
+
+void line(double x0 , double y0 , double x1 , double y1) {
+    if (__thickness == 1) {
+        __draw_line(x0, y0, x1, y1, __stroke);
+        return;
+    }
+    __fill_line(x0, y0, x1, y1, __thickness, __stroke);
+}
+
+double calculateBezierPoint(double p0, double p1, double p2, double p3, double t) {
+    return p0 * (1 - t) * (1 - t) * (1 - t) + 3 * p1 * t * (1 - t) * (1 - t) + 3 * p2 * t * t * (1 - t) + p3 * t * t * t;
+}
+
+// Função para desenhar uma curva de Bezier de grau 3
+// void bezier(double xa, double ya, double xb, double yb, double xc, double yc, double xd, double yd) {
+//     // Número de segmentos
+//     int numSegments = 100;
+//     double increment = 1.0 / numSegments;
+
+//     // Desenha a curva de Bezier com triângulos
+//     for (int i = 0; i < numSegments; ++i) {
+//         double t0 = i * increment;
+//         double t1 = (i + 1) * increment;
+
+//         double x0 = calculateBezierPoint(xa, xb, xc, xd, t0);
+//         double y0 = calculateBezierPoint(ya, yb, yc, yd, t0);
+//         double x1 = calculateBezierPoint(xa, xb, xc, xd, t1);
+//         double y1 = calculateBezierPoint(ya, yb, yc, yd, t1);
+
+//         __fill_raw_triangle(x0, y0, x1, y1, x1, y1, __stroke); // desenha um triângulo com vértices coincidentes
+//     }
+// }
+
+void __fill_triangle_scale(double v1x, double v1y, double v2x, double v2y, double v3x, double v3y, Color color) {
+    double s = __get_transform_scale();
+    V2d v1 = __transform(v1x/s, v1y/s);
+    V2d v2 = __transform(v2x/s, v2y/s);
+    V2d v3 = __transform(v3x/s, v3y/s);
+    v1x = v1.x;
+    v1y = v1.y;
+    v2x = v2.x;
+    v2y = v2.y;
+    v3x = v3.x;
+    v3y = v3.y;
+    __fill_raw_triangle(v1x, v1y, v2x, v2y, v3x, v3y, color);
+}
+
+void __bezier(double xa, double ya, double xb, double yb, double xc, double yc, double xd, double yd) {
+    int thickness = __thickness;
+    // Número de segmentos
+    int numSegments = 100;
+    double increment = 1.0 / numSegments;
+
+    // Desenha a curva de Bezier com espessura
+    for (int i = 0; i < numSegments; ++i) {
+        double t0 = i * increment;
+        double t1 = (i + 1) * increment;
+
+        double x0 = calculateBezierPoint(xa, xb, xc, xd, t0);
+        double y0 = calculateBezierPoint(ya, yb, yc, yd, t0);
+        double x1 = calculateBezierPoint(xa, xb, xc, xd, t1);
+        double y1 = calculateBezierPoint(ya, yb, yc, yd, t1);
+
+        // Calcula os vetores normalizados
+        double dx = x1 - x0;
+        double dy = y1 - y0;
+        double length = xsqrt(dx * dx + dy * dy);
+        if (length != 0) {
+            dx /= length;
+            dy /= length;
+        }
+
+        // Calcula os vetores perpendiculares
+        double vx = -dy;
+        double vy = dx;
+
+        // Calcula os vértices dos triângulos
+        double x2 = x0 + vx * thickness;
+        double y2 = y0 + vy * thickness;
+        double x3 = x1 + vx * thickness;
+        double y3 = y1 + vy * thickness;
+        double x4 = x1 - vx * thickness;
+        double y4 = y1 - vy * thickness;
+        double x5 = x0 - vx * thickness;
+        double y5 = y0 - vy * thickness;
+
+        // Desenha os triângulos formados pelos vértices
+        __fill_triangle_scale(x0, y0, x1, y1, x2, y2, __stroke);
+        __fill_triangle_scale(x1, y1, x2, y2, x3, y3, __stroke);
+        __fill_triangle_scale(x1, y1, x3, y3, x4, y4, __stroke);
+        __fill_triangle_scale(x0, y0, x5, y5, x4, y4, __stroke);
+        __fill_triangle_scale(x0, y0, x5, y5, x1, y1, __stroke);
+    }
+}
+
+void bezier(double xa, double ya, double xb, double yb, double xc, double yc, double xd, double yd) {
+    double s = __get_transform_scale();
+    if (__fill_enable) {
+        __bezier(xa * s, ya * s, xb * s, yb * s, xc * s, yc * s, xd * s, yd * s);
+    }
+}
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -9607,7 +10208,7 @@ void __x_replace_unicode(char * text, __x_Letter * output, size_t * length){
     *length = size;
 }
 
-void x_write_set_size(int value){
+void textSize(int value){
     __x_font_size = value;
 }
 
@@ -9623,7 +10224,7 @@ int __x_write(int x, int y, __x_Letter * text, size_t length){
             continue;
         }
         if(text[i].value != ' '){
-            delta = x_draw_art(x + dx, y + dy * __X_LETTER_SIZE * zoom, zoom, __x_asc_map[(int)text[i].value]);
+            delta = ascArt(x + dx, y + dy * __X_LETTER_SIZE * zoom, zoom, __x_asc_map[(int)text[i].value]);
             int adx = 0, ady = 0, Adx = 0, Ady = 0;
             if(text[i].acento != 0){
                 if(text[i].acento == __x_agudo){
@@ -9646,7 +10247,7 @@ int __x_write(int x, int y, __x_Letter * text, size_t length){
                     px = Adx * zoom + x + dx + delta/2;
                     py = Ady * zoom + y + dy * __X_LETTER_SIZE * zoom;
                 }
-                x_draw_art(px, py, zoom, __x_asc_map[text[i].acento]);
+                ascArt(px, py, zoom, __x_asc_map[text[i].acento]);
             }
         }
         dx += delta;
@@ -9654,7 +10255,7 @@ int __x_write(int x, int y, __x_Letter * text, size_t length){
     return x + dx;
 }
 
-int x_write(int x, int y, const char * format, ...){
+int text(int x, int y, const char * format, ...){
     static int init_asc = 0;
     if(!init_asc){
         init_asc = 1;
@@ -10669,33 +11270,34 @@ __x_asc_map['~'] = (\
 #include <stdint.h>
 #include <stdlib.h>
 
-V2d x_v2d_make(double x, double y){
+
+V2d v2d(double x, double y){
     V2d v = {x, y};
     return v;
 }
 
-double x_v2d_length(double x, double y){
-    return x_math_sqrt(x * x + y * y);
+double v2d_length(double x, double y){
+    return xsqrt(x * x + y * y);
 }
 
-double x_v2d_distance(double ax, double ay, double bx, double by){
-    return x_v2d_length(bx - ax, by - ay);
+double dist(double ax, double ay, double bx, double by){
+    return v2d_length(bx - ax, by - ay);
 }
 
-V2d x_v2d_sum(V2d a, V2d b){
-    return x_v2d_make(a.x + b.x, a.y + b.y);
+V2d v2d_sum(V2d a, V2d b){
+    return v2d(a.x + b.x, a.y + b.y);
 }
 
-V2d x_v2d_sub(V2d a, V2d b){
-    return x_v2d_make(a.x - b.x, a.y - b.y);
+V2d v2d_sub(V2d a, V2d b){
+    return v2d(a.x - b.x, a.y - b.y);
 }
 
-V2d x_v2d_dot(V2d a, double value){
-    return x_v2d_make(a.x * value, a.y * value);
+V2d v2d_dot(V2d a, double value){
+    return v2d(a.x * value, a.y * value);
 }
 
-V2d x_v2d_normalize(V2d v){
-    double lenght = x_v2d_length(v.x, v.y);
+V2d v2d_normalize(V2d v){
+    double lenght = v2d_length(v.x, v.y);
     if(lenght < 0.0000001)
         return v;
     v.x = v.x * (1.0/lenght);
@@ -10703,27 +11305,27 @@ V2d x_v2d_normalize(V2d v){
     return v;
 }
 
-V2d x_v2d_ortho(V2d v){
-    return x_v2d_make(v.y, -v.x);
+V2d v2d_ortho(V2d v){
+    return v2d(v.y, -v.x);
 }
 
-int   x_math_rand(int min, int max){
+int   xrand(int min, int max){
     return rand() % (max - min) + min;
 }
 
 /* https://stackoverflow.com/questions/5122993/floor-int-function-implementaton?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa */
-int x_math_floor(double x) {
+int xfloor(double x) {
     int xi = (int) x;
     return x < xi ? xi - 1 : xi;
 }
 
-int x_math_round(double x) {
+int xround(double x) {
 	return x + 0.5;
 }
 
 
 /* funcao necessario para o po */
-double x_math_sqrt(const double m)
+double xsqrt(const double m)
 {
    double i=0;
    double x1 = 0, x2 = 0;
@@ -10742,12 +11344,12 @@ double x_math_sqrt(const double m)
    return x2;
 }
 
-double x_math_pow( double x, double z ){
+double xpow( double x, double z ){
     int y =  (int) z;
     double temp;
     if (y == 0)
     return 1;
-    temp = x_math_pow (x, y / 2);
+    temp = xpow (x, y / 2);
     if ((y % 2) == 0) {
         return temp * temp;
     } else {
@@ -10758,13 +11360,13 @@ double x_math_pow( double x, double z ){
     }
 }
 
-double x_math_fmod(double a, double b)
+double xfmod(double a, double b)
 {
-    return (a - b * x_math_floor(a / b));
+    return (a - b * xfloor(a / b));
 }
 
-int x_math_ceil(double n){
-    return -x_math_floor(-n);
+int xceil(double n){
+    return -xfloor(-n);
 }
 
 
@@ -10812,14 +11414,14 @@ double __icos(long x)
     return __isin(x+90);
 }
 
-double x_math_sin(double d)
+double xsin(double d)
 {
     double a = __isin((long) d);
     double b = __isin((long) d+1);
     return a + (d-(int)d) * (b-a);
 }
 
-double x_math_cos(double d)
+double xcos(double d)
 {
     double a = __icos((long) d);
     double b = __icos((long) d+1);
@@ -10827,7 +11429,7 @@ double x_math_cos(double d)
 }
 
 /* Nvidia */
-double x_math_acos(double x) {
+double xacos(double x) {
     double negate = (double)(x < 0);
     x = (x >= 0) ? x : -x;
     double ret = -0.0187293;
@@ -10837,12 +11439,12 @@ double x_math_acos(double x) {
     ret = ret - 0.2121144;
     ret = ret * x;
     ret = ret + 1.5707288;
-    ret = ret * x_math_sqrt(1.0-x);
+    ret = ret * xsqrt(1.0-x);
     ret = ret - 2 * negate * ret;
     return negate * 3.14159265358979 + ret;
 }
 
-double x_math_fabs(double f){
+double xfabs(double f){
     return f < 0 ? -f : f;
 }
 
@@ -10854,30 +11456,30 @@ double x_math_fabs(double f){
 static int __X_GRID_SIZE = 50;
 static int __X_GRID_SEP = 1;
 
-void x_grid_init(int side, int sep){
+void gridInit(int side, int sep){
     __X_GRID_SIZE = side;
     __X_GRID_SEP = sep;
 }
 
-void x_grid_square(int l, int c){
+void gridSquare(int l, int c){
     int size = __X_GRID_SIZE, sep = __X_GRID_SEP;
-    x_fill_rect(c * size + sep, l * size + sep, size - sep, size - sep);
+    rect(c * size + sep, l * size + sep, size - sep, size - sep);
 }
 
-void x_grid_circle(int l, int c){
-    x_fill_circle(c * __X_GRID_SIZE + __X_GRID_SIZE / 2, l * __X_GRID_SIZE + __X_GRID_SIZE / 2,
-                  __X_GRID_SIZE / 2 - __X_GRID_SEP + 1);
+void gridCircle(int l, int c){
+    circle(c * __X_GRID_SIZE + __X_GRID_SIZE / 2, l * __X_GRID_SIZE + __X_GRID_SIZE / 2,
+                  __X_GRID_SIZE - __X_GRID_SEP + 1);
 }
 
 
-void x_grid_write(int l, int c, const char *format, ...){
-    char text[1000];
+void gridText(int l, int c, const char *format, ...){
+    char _text[1000];
     va_list args;
     va_start( args, format );
-    vsprintf(text, format, args);
+    vsprintf(_text, format, args);
     va_end( args );
     float xdelta = 0.13, ydelta = 0.35;
-    x_write((c + xdelta) * __X_GRID_SIZE, (l + ydelta) * __X_GRID_SIZE, "%s", text);
+    text((c + xdelta) * __X_GRID_SIZE, (l + ydelta) * __X_GRID_SIZE, "%s", _text);
 
 }
 
@@ -10891,44 +11493,44 @@ static float __X_BAR_YFACTOR = 1; /* multiplicative factor of bar height  */
 static int __X_BAR_SIZE = 0;
 static int __X_BAR_MAX = 0;
 
-void x_bar_init(int size, int max){
+void barInit(int size, int max){
     __X_BAR_SIZE = size;
     __X_BAR_MAX = max;
-    __X_BAR_WIDTH = x_get_width() / (size + 2);
-    __X_BAR_YFACTOR = (x_get_height() - 4.0 * __X_BAR_WIDTH);
+    __X_BAR_WIDTH = width() / (size + 2);
+    __X_BAR_YFACTOR = (height() - 4.0 * __X_BAR_WIDTH);
     __X_BAR_YFACTOR = __X_BAR_YFACTOR < 0 ? -__X_BAR_YFACTOR : __X_BAR_YFACTOR;
     __X_BAR_YFACTOR /= max;
     if(__X_BAR_YFACTOR < 0.2)
         __X_BAR_YFACTOR = 0.2;
 }
 
-void x_bar_one(int i, int value){
+void barOne(int i, int value){
     if((i < 0)||(i >= __X_BAR_SIZE))
         return;
     int x = __X_BAR_WIDTH * (i + 1);
-    int ybase = x_get_height() - __X_BAR_WIDTH;
+    int ybase = height() - __X_BAR_WIDTH;
     int j;
     for(j = 0; j < ((int) __X_BAR_WIDTH - 2) ; j++)
-        x_draw_line(x + j, ybase, x + j, ybase - __X_BAR_YFACTOR * value);
+        line(x + j, ybase, x + j, ybase - __X_BAR_YFACTOR * value);
 }
 
-void x_bar_all(int * vet, int size, const char * colors, int * indices){
-    x_color_set(BLACK);
-    x_clear();
+void barAll(int * vet, int size, const char * colors, int * indices){
+    background(BLACK);
     int i = 0;
-    x_color_set(WHITE);
+    stroke(WHITE);
     for(i = 0; i < size; i++)
-        x_bar_one(i, vet[i]);
+        barOne(i, vet[i]);
     if(colors != NULL && (strcmp(colors, "") != 0)){
         int qtd = strlen(colors);
         for(i = 0; i < qtd; i++){
-            x_color_load(colors[i]);
-            x_bar_one(indices[i], vet[indices[i]]);
+            char c[2] = {colors[i], '\0'};
+            stroke(color(c));
+            barOne(indices[i], vet[indices[i]]);
         }
     }
     static int atual = 0;
-    x_color_set(WHITE); /* desenhando estado */
-    x_write(0, 0, "%d", atual++);
+    stroke(WHITE); /* desenhando estado */
+    text(0, 0, "%d", atual++);
 }
 
 /*########################*/
@@ -10941,49 +11543,53 @@ static double  __X_PEN_Y = 200;
 static double  __X_PEN_THICK = 1;
 static int     __X_PEN_DOWN = 1;
 
-void   x_pen_set_angle(double degrees){
+void   penSetAngle(double degrees){
     __X_PEN_ANGLE = degrees;
 }
-void   x_pen_set_thick(int thick){
+void   penSetThick(int thick){
     if(thick > 0)
         __X_PEN_THICK = thick;
 }
-void   x_pen_set_pos(double x, double y){
+void   penSetPos(double x, double y){
     __X_PEN_X = x;
     __X_PEN_Y = y;
 }
-double x_pen_get_angle(){
+double penGetAngle(){
     return __X_PEN_ANGLE;
 }
-int    x_pen_get_thick(){
+int    penGetThick(){
     return __X_PEN_THICK;
 }
-double    x_pen_get_x(){
+double    penGetX(){
     return __X_PEN_X;
 }
-double    x_pen_get_y(){
+double    penGetY(){
     return __X_PEN_Y;
 }
-void   x_pen_up(void){
+void   penUp(void){
     __X_PEN_DOWN = 0;
 }
-void   x_pen_down(void){
+void   penDown(void){
     __X_PEN_DOWN = 1;
 }
-void   x_pen_walk(double distance){
-    double x = __X_PEN_X + distance * x_math_cos(__X_PEN_ANGLE);
-    double y = __X_PEN_Y - distance * x_math_sin(__X_PEN_ANGLE);
-    if(__X_PEN_DOWN)
-        x_fill_line(__X_PEN_X, __X_PEN_Y, x, y, __X_PEN_THICK);
+void   penWalk(double distance){
+    double x = __X_PEN_X + distance * xcos(__X_PEN_ANGLE);
+    double y = __X_PEN_Y - distance * xsin(__X_PEN_ANGLE);
+    if(__X_PEN_DOWN) {
+        strokeWeight(__X_PEN_THICK);
+        line(__X_PEN_X, __X_PEN_Y, x, y);
+    }
     __X_PEN_X = x;
     __X_PEN_Y = y;
 }
-void   x_pen_rotate(int degrees){
+void   penRotate(int degrees){
     __X_PEN_ANGLE += degrees;
 }
-void   x_pen_goto(double x, double y){
-    if(__X_PEN_DOWN)
-        x_fill_line(__X_PEN_X, __X_PEN_Y, x, y, __X_PEN_THICK);
+void   penGoto(double x, double y){
+    if(__X_PEN_DOWN) {
+        strokeWeight(__X_PEN_THICK);
+        line(__X_PEN_X, __X_PEN_Y, x, y);
+    }
     __X_PEN_X = x;
     __X_PEN_Y = y;
 }

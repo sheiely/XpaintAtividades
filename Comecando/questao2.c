@@ -9,14 +9,15 @@ de raio 200 no meio da tela
 */
 
 int main() {
-  x_open(largura, altura, "exemplos/Atividade 2");
-  /*
-  resolução:
-  x_color_set(BLUE);
-  x_fill_circle(300, 300, 200);
-  */
-  x_save();
-  x_close();
+  open(largura, altura, "exemplos/Questao 2");
+  background(BLACK);
+  stroke(WHITE);
+  fill(BLUE);
+  strokeWeight(5);
+  circle(300, 300, 400);
+  
+  save();
+  close();
 
   return 0;
 }

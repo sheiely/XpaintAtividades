@@ -10,18 +10,18 @@ agora seu dever é refazer a logo usando C. Dica: Use 2 ciruclos e 2 linhas
 */
 
 int main() {
-  x_open(largura, altura, "exemplos/Atividade 5");
-  /*
-  resolução:
-  x_color_set(RED);
-  x_fill_circle(300, 300, 200);
-  x_color_set(x_color_make(220, 220, 0, 255));
-  x_fill_circle(300, 300, 150);
-  x_color_set(RED);
-  x_fill_line(440, 440, 160, 160, 50);
-  x_fill_line(160, 440, 440, 160, 50);
-  */
-  x_save();
-  x_close();
+  open(largura, altura, "exemplos/Questao 1");
+  
+  fill("red");
+  circle(300, 300, 400);
+  setFill(rgba(220, 220, 0, 255));
+  circle(300, 300, 300);
+  stroke("red");
+  strokeWeight(50);
+  line(440, 440, 160, 160);
+  line(160, 440, 440, 160);
+
+  save();
+  close();
   return 0;
 }
