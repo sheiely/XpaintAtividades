@@ -10,3 +10,9 @@ agora seu dever é refazer a logo usando C
 ![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Desenhando/exemplos/Questao%201.png)
 
 
+## Questão 2 - Desenhe o icone do wifi
+Você está desenvolvendo um sistema operacional e precisa desenhar o icone do wifi
+- Utilize 2 círculos e 2 retas
+<p>imagem de referência:</p>
+
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Desenhando/exemplos/Questao%202.png)
