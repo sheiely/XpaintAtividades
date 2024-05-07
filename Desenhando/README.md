@@ -15,3 +15,10 @@ Você está desenvolvendo um sistema operacional e precisa desenhar o icone do w
 <p>imagem de referência:</p>
 
 ![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Desenhando/exemplos/Questao%202.png)
+
+
+## Questão 3 - Desenhe a logo do TikTok
+Pensando
+<p>imagem de referência:</p>
+
+![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Desenhando/exemplos/Questao%203.png)
