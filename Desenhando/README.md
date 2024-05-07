@@ -11,7 +11,7 @@ agora seu dever é refazer a logo usando C
 
 
 ## Questão 2 - Desenhe o icone do wifi
-Você está desenvolvendo um sistema operacional e precisa desenhar o icone do wifi
+Sua vó não consegue achar o icone do wifi, desenha para ela
 <p>imagem de referência:</p>
 
 ![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Desenhando/exemplos/Questao%202.png)
