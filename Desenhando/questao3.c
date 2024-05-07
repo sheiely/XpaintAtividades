@@ -5,7 +5,7 @@ int largura = 600, altura = 600;
 // 
 
 int main() {
-  open(largura, altura, "main2");
+  open(largura, altura, "Questao 3");
   background("0, 0, 0");
   // vermelho
   stroke("255, 51, 90");
