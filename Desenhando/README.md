@@ -18,7 +18,7 @@ Sua vó não consegue achar o icone do wifi, desenhe para ela
 
 
 ## Questão 3 - Desenhe a logo do TikTok
-Pensando
+Os programas de edição ainda estão desaparecidos, mas agora, como você é a unica pessoa no mundo que sabe gerar uma imagem sem o photoshop, todas a grandes empresas estão esperando seu serviço, dessa vez seu dever é desenhar a logo do tiktok
 <p>imagem de referência:</p>
 
 ![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Desenhando/exemplos/Questao%203.png)
