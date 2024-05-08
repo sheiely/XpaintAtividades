@@ -5,6 +5,7 @@
 
 ## Conceitos:
 - [@Desenhando](Desenhando/README.md)
+- [@Formas](Formas/README.md)
 - [@Bandeiras](Bandeiras/README.md)
 
 ## Repetição:
