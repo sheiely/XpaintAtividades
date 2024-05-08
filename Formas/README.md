@@ -1,7 +1,7 @@
 # XpaintAtividades
 
 ## Questao 1 - Formas
-Faça um programa que recebe uma entrada e vai desenhar a forma que foi escrita
+Faça um programa que recebe uma entrada e desenha a forma que foi escrita
 <br>As entradas podem ser: 
 - "Quadrado"
 - "Ciruclo"
