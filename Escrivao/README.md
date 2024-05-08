@@ -1,6 +1,6 @@
 # XpaintAtividades
 
-## Questão 1 - Escrivãp
+## Questão 1 - Escrivão
 Desenhe um texto apartir da emtrada do usuario, o texto deve sempre estar centralizado na tela
 <p>imagem de referência:</p>
 
