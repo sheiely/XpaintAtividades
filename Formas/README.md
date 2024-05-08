@@ -1,11 +1,11 @@
 # XpaintAtividades
 
 ## Questao 1 - Formas
-Faça um programa que recebe uma entrada.
+Faça um programa que recebe uma entrada e vai desenhar a forma que foi escrita
 As entradas podem ser: 
-- "Quadrado", para desenhar um quadrado no meio da tela
-- "Ciruclo", para circulo um quadrado no meio da tela
-- "Triangulo", para triangulo um quadrado no meio da tela
+- "Quadrado"
+- "Ciruclo"
+- "Triangulo"
 
 <p>imagem de referência:</p>
 
