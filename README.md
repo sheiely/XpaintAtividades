@@ -10,5 +10,5 @@
 
 ## Repetição:
 - [@For](Xadrez/README.md)
-- [@For](Formas2/README.md)
+- [@Formas 2](Formas2/README.md)
 
