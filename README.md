@@ -2,10 +2,10 @@
 
 ## Primeiros Passos:
 - [@Comecando](Comecando/README.md)
-
-## Conceitos:
 - [@Desenhando](Desenhando/README.md)
 - [@Escrivão](Escrivao/README.md)
+
+## Conceitos:
 - [@Formas](Formas/README.md)
 - [@Bandeiras](Bandeiras/README.md)
 
