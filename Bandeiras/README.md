@@ -3,7 +3,7 @@
 Nessa atividade você vai gerar imagens com varios padroes de bandeiras diferentes
 partindo do exemplo:
 ```c
-x_open(largura, altura, "exemplos/Questao 1");
+open(largura, altura, "exemplos/Questao 1");
   
     for(int i=0; i < 400; i++){
 
@@ -12,18 +12,18 @@ x_open(largura, altura, "exemplos/Questao 1");
         int y = rand()%altura;//Cria uma posição de y aleatoria
 
         if(x>largura/2){//Aqui temos um if: caso o x seja maior que a metade da largura, ele será pintado de vermelho
-        x_color_set(RED);
+        fill("red");
         }else{
-        x_color_set(BLUE);//Se não, será pintado de azul
+        fill("blue");//Se não, será pintado de azul
         }
-        x_fill_circle(x, y, 10);
+        circle(x, y, 20);
 
 
 
 
     }
-    x_save();
-    x_close();
+save();
+close();
 ```
 
 ## Questão 1 - Leste Oeste
