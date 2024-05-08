@@ -8,7 +8,6 @@ int largura = 600, altura = 600;
 int main() {
   open(largura, altura, "main4");
   stroke("white");
-  int size = 0;
   textSize(64);
   char forma[50];
   scanf("%s", forma);
