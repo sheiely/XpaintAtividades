@@ -1,7 +1,7 @@
 # XpaintAtividades
 ## Rapido Tutorial
-Para utilizar o Xpaint temos que basicamente abrir a imagem com a função **x_open()**,
-depois para salvar e gerar o png usamos o **x_save()** e para encerrar o Xpaint e liberar os recursos o **x_close()**
+Para utilizar o Xpaint temos que basicamente abrir a imagem com a função **open()**,
+depois para salvar e gerar o png usamos o **save()** e para encerrar o Xpaint e liberar os recursos o **close()**
 ```c
 open(largura_da_imagem, altura_da_imagem, "nome da imagem");//cria a imagem
 
