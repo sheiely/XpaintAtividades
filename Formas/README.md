@@ -2,7 +2,7 @@
 
 ## Questao 1 - Formas
 Faça um programa que recebe uma entrada e vai desenhar a forma que foi escrita
-As entradas podem ser: 
+<br>As entradas podem ser: 
 - "Quadrado"
 - "Ciruclo"
 - "Triangulo"
