@@ -9,7 +9,7 @@ de largura 200 e altura 300 no meio da tela
 */
 
 int main(){
-  open(largura, altura, "exemplos/Questao 1");
+  xopen(largura, altura, "exemplos/Questao 1");
   
   background(BLACK);
   stroke(WHITE);
@@ -18,7 +18,7 @@ int main(){
   rect(200,150, 200, 300);
  
   save();
-  close();
+  xclose();
     
   return 0;
 }
