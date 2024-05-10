@@ -9,7 +9,7 @@ de raio 200 no meio da tela
 */
 
 int main() {
-  open(largura, altura, "exemplos/Questao 2");
+  xopen(largura, altura, "exemplos/Questao 2");
   background(BLACK);
   stroke(WHITE);
   fill(BLUE);
@@ -17,7 +17,7 @@ int main() {
   circle(300, 300, 400);
   
   save();
-  close();
+  xclose();
 
   return 0;
 }
