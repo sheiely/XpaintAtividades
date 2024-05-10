@@ -7,7 +7,7 @@ int largura = 600, altura = 600;
 //
 
 int main() {
-  open(largura, altura, "quadrado");
+  xopen(largura, altura, "quadrado");
   char forma[50];
   scanf("%s", forma);
   if (strcmp(forma, "quadrado") == 0) {
@@ -20,7 +20,7 @@ int main() {
     printf("Figura inválida\n");
   }
   save();
-  close();
+  xclose();
   return 0;
   // paia
 }

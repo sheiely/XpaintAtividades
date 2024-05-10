@@ -181,7 +181,7 @@ void gerarMarcacoes(){
 
 
 int main() {
-  open(larguraTotal, alturaTotal, "Damas");
+  xopen(larguraTotal, alturaTotal, "Damas");
   background("156, 121, 75");
   gerarMarcacoes();
   Peca pecas[qntViva];
@@ -267,6 +267,6 @@ int main() {
     
   }
   printf("Acabou o jogo\n");
-  close();
+  xclose();
   return 0;
 }

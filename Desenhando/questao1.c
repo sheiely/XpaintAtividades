@@ -10,7 +10,7 @@ agora seu dever é refazer a logo usando C. Dica: Use 2 ciruclos e 2 linhas
 */
 
 int main() {
-  open(largura, altura, "exemplos/Questao 1");
+  xopen(600, 600, "exemplos/Questao 1");
   
   fill("red");
   circle(300, 300, 400);
@@ -22,6 +22,6 @@ int main() {
   line(160, 440, 440, 160);
 
   save();
-  close();
+  xclose();
   return 0;
 }
