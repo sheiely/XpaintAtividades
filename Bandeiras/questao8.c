@@ -4,26 +4,22 @@ int largura = 600, altura = 600;
 
 
 int main(){
-    x_open(largura, altura, "exemplos/Questao 8");
+    xopen(largura, altura, "exemplos/Questao 8");
   
     for(int i=0; i < 400; i++){
-
-        /* Resolução:
         int x = rand()%largura;
         int y = rand()%altura;
+
         if(x<altura-y){
-            x_color_set(BLUE);  
+            fill("blue");  
         }else{
-            x_color_set(RED);
+            fill("red");
         }
-        x_fill_circle(x, y, 10);
-        */
-
-
+        circle(x, y, 10);
 
     }
-    x_save();
-    x_close();
+    save();
+    xclose();
         
     return 0;
 }
