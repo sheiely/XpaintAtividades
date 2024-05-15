@@ -11,13 +11,13 @@ o canto inferior esquerdo da imagem com o canto superior direito.
 
 int main() {
 
-  open(largura, altura, "exemplos/Questao 3");
+  xopen(largura, altura, "exemplos/Questao 3");
   background(BLACK);
   stroke(GREEN);
   strokeWeight(5);
 
   line(0, 600, 600, 0);
   save();
-  close();
+  xclose();
   return 0;
 }
