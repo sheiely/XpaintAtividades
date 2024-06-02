@@ -2,7 +2,7 @@
 #include "xpaint.h"
 
 int main(){
-    create(200, 200, "questao1"); 
+    create(200, 200, "exemplo1"); 
     background("0, 0, 0");
     for (int i = 0; i < 90;) {
         int x = xrand(10);

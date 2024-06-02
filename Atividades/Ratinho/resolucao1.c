@@ -6,7 +6,7 @@ int r = 100, g = 100, b = 100;
 int x = 0, y = 0;
 
 int main(){
-    create(largura, altura, "ratinho");
+    create(largura, altura, "exemplo1");
     int x, y, w;
     scanf("%d %d %d", &x, &y, &w);
 

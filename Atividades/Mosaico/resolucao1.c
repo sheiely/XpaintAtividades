@@ -1,12 +1,12 @@
 #define XPAINT
 #include "xpaint.h"
-int largura = 600, altura = 600;
+int largura = 300, altura = 300;
 int tam = 20;
 int r = 100, g = 100, b = 100;
 int x = 0, y = 0;
 
 int main(){
-  create(largura, altura, "mosaico");
+  create(largura, altura, "exemplo1");
   int qnt = 0;
   for(int i=0; i < (largura/tam) * (altura/tam); i++){
     qnt++;

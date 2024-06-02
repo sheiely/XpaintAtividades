@@ -3,13 +3,13 @@
 ## Questao 1 - Formas
 Faça um programa que recebe uma entrada e desenha a forma que foi escrita
 <br>As entradas podem ser: 
+- "Circuclo"
 - "Quadrado"
-- "Ciruclo"
 - "Triangulo"
 
-<p>imagem de referência:</p>
+<p>Imagem de referência:</p>
 
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Formas/exemplos/quadrado.png)
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Formas/exemplos/Circulo.png)
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Formas/exemplos/triangulo.png)
+![Referencia_Atividade1](exemplo1-1.png)
+![Referencia_Atividade1](exemplo1-2.png)
+![Referencia_Atividade1](exemplo1-3.png)
 

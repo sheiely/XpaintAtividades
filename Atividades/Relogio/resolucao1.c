@@ -6,7 +6,7 @@
 #include <time.h>
 
 int main(){
-    create(200, 200, "main");
+    create(200, 200, "exemplo1");
 
     while (true) {
         time_t t = time(NULL);

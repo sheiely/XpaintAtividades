@@ -4,7 +4,7 @@ partindo do exemplo:
 ## Rascunho
 
 ```c
-open(largura, altura, "exemplos/Questao 1");
+create(largura, altura, "exemplo1");
   
     for(int i=0; i < 400; i++){
 
@@ -24,36 +24,36 @@ open(largura, altura, "exemplos/Questao 1");
 
     }
 save();
-close();
+destroy();
 ```
 
 ## Questão 1 - Leste Oeste
 
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplo1.png)
+![Referencia_Atividade1](exemplo1.png)
 
 ## Questão 2 - Norte Sul
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplo2.png)
+![Referencia_Atividade1](exemplo2.png)
 
 ## Questão 3 - Leste Meio Oeste
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplo3.png)
+![Referencia_Atividade1](exemplo3.png)
 
 ## Questão 4 - Norte Meio Sul
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplo4.png)
+![Referencia_Atividade1](exemplo4.png)
 
 ## Questão 5 - Leste Norte Sul
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplo5.png)
+![Referencia_Atividade1](exemplo5.png)
 
 ## Questão 6 - Quadrantes
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplo6.png)
+![Referencia_Atividade1](exemplo6.png)
 
 ## Questão 7 - Diagonal
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplo7.png)
+![Referencia_Atividade1](exemplo7.png)
 
 ## Questão 8 - Contradiagonal
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplo8.png)
+![Referencia_Atividade1](exemplo8.png)
 
 ## Questão 9 - X
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplo9.png)
+![Referencia_Atividade1](exemplo9.png)
 
 ## Questão 10 - X não quadrado
-![Referencia_Atividade1](https://github.com/sheiely/XpaintAtividades/blob/main/Bandeiras/exemplo10.png)
+![Referencia_Atividade1](exemplo10.png)

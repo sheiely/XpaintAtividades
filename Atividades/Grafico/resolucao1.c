@@ -6,7 +6,7 @@
 int largura = 600, altura = 600;
 
 int main() {
-  create(largura, altura, "main4");
+  create(largura, altura, "exemplo1");
   background("white");
   int tam, maior = 0;
   scanf("%d", &tam);

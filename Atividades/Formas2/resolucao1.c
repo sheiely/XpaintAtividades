@@ -6,7 +6,7 @@
 int largura = 600, altura = 600;
 
 int main() {
-  xopen(largura, altura, "main3");
+  create(largura, altura, "teste");
   while (1) {
     int x, y, size;
     char forma[50];
@@ -31,7 +31,6 @@ int main() {
     save();
   }
   
-  xclose();
+  destroy();
   return 0;
-  // paia
 }

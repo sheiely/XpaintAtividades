@@ -5,7 +5,7 @@ int largura = 600, altura = 600;
 // 
 
 int main() {
-  xopen(600, 600, "Questao 3");
+  create(600, 600, "exemplo3");
   background("0, 0, 0");
   // vermelho
   stroke("255, 51, 90");
@@ -32,7 +32,6 @@ int main() {
   strokeWeight(29);
   arc(350, 175, 125, 0, 180, 90);
   save();
-  xclose();
+  destroy();
   return 0;
-  // paia
 }

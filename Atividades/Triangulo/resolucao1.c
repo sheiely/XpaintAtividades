@@ -2,7 +2,7 @@
 #include "xpaint.h"
 
 int main() {
-  create(600, 400, "exemplos/questao1"); // cria uma tela de 600x400 com o nome main.png
+  create(600, 400, "exemplo1"); // cria uma tela de 600x400 com o nome main.png
   stroke("white");
   int px = 300, py = 200;
   int tam = 100;

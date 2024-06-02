@@ -19,7 +19,7 @@ int limitar(int n ,int min, int max){
 
 int main(){
     int x = largura/2, y = altura/2;
-    create(largura, altura, "prisao");
+    create(largura, altura, "exemplo1");
     background("100, 100, 100");
     stroke("black");
     square(100, 100, 400);

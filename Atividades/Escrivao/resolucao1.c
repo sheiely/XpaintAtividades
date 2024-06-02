@@ -6,14 +6,14 @@
 int largura = 600, altura = 600;
 
 int main() {
-  xopen(largura, altura, "main4");
+  create(largura, altura, "exemplo1");
   stroke("white");
   textSize(64);
   char forma[50];
   scanf("%s", forma);
   text(width() / 2 - (strlen(forma) * 32) / 2, height() / 2 - 64, "%s", forma);
   save();
-  xclose();
+  destroy();
 
   return 0;
 }

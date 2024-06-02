@@ -4,10 +4,10 @@
 #include <string.h>
 
 int largura = 600, altura = 600;
-//
+
 
 int main() {
-  xopen(largura, altura, "quadrado");
+  create(largura, altura, "exemplo1");
   char forma[50];
   scanf("%s", forma);
   if (strcmp(forma, "quadrado") == 0) {
@@ -20,7 +20,6 @@ int main() {
     printf("Figura inválida\n");
   }
   save();
-  xclose();
+  destroy();
   return 0;
-  // paia
 }
