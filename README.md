@@ -12,7 +12,6 @@
 
 
 ## Repetição:
-- [@For](Atividades/Xadrez/README.md)
 - [@Formas 2](Atividades/Formas2/README.md)
 - [@Mosaico](Atividades/Mosaico/README.md)
 - [@Prisao](Atividades/Prisao/README.md)
