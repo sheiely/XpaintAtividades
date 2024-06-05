@@ -1,3 +1,4 @@
+#define XPAINT
 #include "xpaint.h"
 #include <stdio.h>
 
@@ -13,7 +14,7 @@ Nessa atividade você tem que gerar um jogo de damas
 
 int largura = 600, altura = 600;
 int main(){
-  create(largura, altura, "exemplos/questao1");
+  create(largura, altura, "exemplo1");
   int casas = 8;
   for(int x = 0; x < casas; x++){
     for(int y = 0; y < casas; y++){

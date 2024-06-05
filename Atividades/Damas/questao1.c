@@ -1,5 +1,5 @@
 
-#include "xlite.h"
+#include "../xpaint.h"
 #include <stdio.h>
 
 int larguraTotal = 650, alturaTotal = 650;

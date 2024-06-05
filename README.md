@@ -15,6 +15,7 @@
 - [@Formas 2](Atividades/Formas2/README.md)
 - [@Mosaico](Atividades/Mosaico/README.md)
 - [@Prisao](Atividades/Prisao/README.md)
+- [@Xandrez](Atividades/Xadrez/README.md)
 - [@Quadriculado](Atividades/Quadriculado/README.md)
 - [@Triangulo](Atividades/Triangulo/README.md)
 
@@ -26,5 +27,5 @@
 
 ## Projetos:
 - [@Relogio](Atividades/Relogio/README.md)
-- [@Xadrez](Atividades/Xadrez/README.md)
+- [@Damas](Atividades/Damas/README.md)
 
