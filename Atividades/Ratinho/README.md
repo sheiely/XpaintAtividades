@@ -6,4 +6,4 @@ Entradas - O usuario vai poder colocar a posicao x, y e a largura da figura
 
 <p>Imagem de referência:</p>
 
-[Vídeo](https://user-images.githubusercontent.com/4747652/227681901-f5331fb0-9a72-49c6-a652-a8a9097accd9.mp4)
+[Vídeo](https://github.com/sheiely/XpaintAtividades/blob/15513635e60115d9b51f7d7405ec0a465fd2fc8d/Atividades/Ratinho/Ratinho.mp4)
