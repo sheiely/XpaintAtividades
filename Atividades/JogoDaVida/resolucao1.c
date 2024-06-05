@@ -45,7 +45,6 @@ int main() {
   printf("Pressione Ctrl+c para parar o jogo da vida");
   while (1)
   {
-    
     for (int i = 0; i < tam; i++){
       for(int k = 0; k < tam; k++){
         int cont = 0;

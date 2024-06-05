@@ -1,7 +1,7 @@
 # XpaintAtividades
 
 ## Questao 1 - Mosaico
-Faça um programa que 
+Faça um programa que crie um mosaico 
 
 <p>Imagem de referência:</p>
 
