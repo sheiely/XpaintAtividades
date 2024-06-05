@@ -1,4 +1,4 @@
-
+#define XPAINT
 #include "../xpaint.h"
 #include <stdio.h>
 
@@ -39,9 +39,9 @@ void gerarMapa(Peca pecas[]){
     for (int x = 0; x < qntCasas; x++) {
       for (int y = 0; y < qntCasas; y++) {        
         if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0)) {
-          setFill(rgba(209, 185, 107, 255));
+          fill("209, 185, 107");
         } else {
-          setFill(rgba(97, 66, 48, 255));
+          fill("97, 66, 48, 255");
         }
         
         rect(x * ((float)largura / qntCasas), y * ((float)altura / qntCasas),
@@ -50,9 +50,9 @@ void gerarMapa(Peca pecas[]){
     }
     for(int i = 0; i<qntViva; i++){
         if(pecas[i].team == 1){
-          setFill(rgba(242, 229, 184, 255));
+          fill("242, 229, 184, 255");
         }else{
-          setFill(rgba(51, 33, 20, 255));
+          fill("51, 33, 20, 255");
         }
         circle(pecas[i].x * ((float)largura / qntCasas)+((float)largura / qntCasas)/2, pecas[i].y * ((float)altura / qntCasas)+ ((float)largura / qntCasas)/2, 60);  
     }
@@ -181,7 +181,7 @@ void gerarMarcacoes(){
 
 
 int main() {
-  xopen(larguraTotal, alturaTotal, "Damas");
+  create(larguraTotal, alturaTotal, "Damas");
   background("156, 121, 75");
   gerarMarcacoes();
   Peca pecas[qntViva];
@@ -267,6 +267,6 @@ int main() {
     
   }
   printf("Acabou o jogo\n");
-  xclose();
+  destroy();
   return 0;
 }
