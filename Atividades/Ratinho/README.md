@@ -6,5 +6,4 @@ Entradas - O usuario vai poder colocar a posicao x, y e a largura da figura
 
 <p>Imagem de referência:</p>
 
-![Referencia_Atividade1](Ratinho.mp4)
-
+[Vídeo](https://user-images.githubusercontent.com/4747652/227681901-f5331fb0-9a72-49c6-a652-a8a9097accd9.mp4)
