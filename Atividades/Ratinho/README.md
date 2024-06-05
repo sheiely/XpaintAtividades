@@ -6,5 +6,5 @@ Entradas - O usuario vai poder colocar a posicao x, y e a largura da figura
 
 <p>Imagem de referência:</p>
 
-[Vídeo](Ratinho.mp4)
+![Referencia_Atividade1](exemplo1.png)
 
