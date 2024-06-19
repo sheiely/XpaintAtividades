@@ -9,7 +9,15 @@ Regras:
 - Cada célula exatamente três ou dois vizinhos sobrevive
 - Cada célula morta com exatamente três vizinhos se torna viva
 
-<p>Imagem de referência:</p>
+<p>Video de referência:</p>
 
-![Referencia_Atividade1](exemplo1.png)
+https://github.com/sheiely/XpaintAtividades/assets/64230956/c9c636b5-86a3-4ac3-a418-0de54d18e075
+
+
+
+
+
+
+
+
 
